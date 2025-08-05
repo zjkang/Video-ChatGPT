@@ -6,7 +6,7 @@
 
 ### Video-ChatGPT: Towards Detailed Video Understanding via Large Vision and Language Models [ACL 2024 🔥]
 
-#### [Muhammad Maaz](https://www.muhammadmaaz.com)* , [Hanoona Rasheed](https://www.hanoonarasheed.com/)* , [Salman Khan](https://salman-h-khan.github.io/) and [Fahad Khan](https://sites.google.com/view/fahadkhans/home)
+#### [Muhammad Maaz](https://www.mmaaz60.com)* , [Hanoona Rasheed](https://www.hanoonarasheed.com/)* , [Salman Khan](https://salman-h-khan.github.io/) and [Fahad Khan](https://sites.google.com/view/fahadkhans/home)
 \* Equally contributing first authors
 
 #### **Mohamed bin Zayed University of Artificial Intelligence**
