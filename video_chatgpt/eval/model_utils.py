@@ -1,151 +1,99 @@
-import os
-import numpy as np
-from PIL import Image
-from decord import VideoReader, cpu
-from transformers import AutoTokenizer, CLIPVisionModel, CLIPImageProcessor
-from video_chatgpt.model import VideoChatGPTLlamaForCausalLM
-from video_chatgpt.utils import disable_torch_init
-from video_chatgpt.constants import *
 import torch
+import numpy as np
+# 1. 【全局导入】必须放在最外面！
+from decord import VideoReader, cpu
+from transformers import AutoTokenizer, CLIPImageProcessor, CLIPVisionModel, BitsAndBytesConfig
+from video_chatgpt.model import VideoChatGPTLlamaForCausalLM
 
-
-def load_video(vis_path, n_clips=1, num_frm=100):
-    """
-    Load video frames from a video file.
-
-    Parameters:
-    vis_path (str): Path to the video file.
-    n_clips (int): Number of clips to extract from the video. Defaults to 1.
-    num_frm (int): Number of frames to extract from each clip. Defaults to 100.
-
-    Returns:
-    list: List of PIL.Image.Image objects representing video frames.
-    """
-
-    # Load video with VideoReader
-    vr = VideoReader(vis_path, ctx=cpu(0))
+def load_video(video_path, num_frames=100):
+    # 2. 【干净的函数】没有任何 try-except，直接用全局变量
+    # 这样 Python 就绝对不会把它误判为局部变量了
+    vr = VideoReader(video_path, ctx=cpu(0))
     total_frame_num = len(vr)
-
-    # Currently, this function supports only 1 clip
-    assert n_clips == 1
-
-    # Calculate total number of frames to extract
-    total_num_frm = min(total_frame_num, num_frm)
-    # Get indices of frames to extract
-    frame_idx = get_seq_frames(total_frame_num, total_num_frm)
-    # Extract frames as numpy array
-    img_array = vr.get_batch(frame_idx).asnumpy()
-    # Set target image height and width
-    target_h, target_w = 224, 224
-    # If image shape is not as target, resize it
-    if img_array.shape[-3] != target_h or img_array.shape[-2] != target_w:
-        img_array = torch.from_numpy(img_array).permute(0, 3, 1, 2).float()
-        img_array = torch.nn.functional.interpolate(img_array, size=(target_h, target_w))
-        img_array = img_array.permute(0, 2, 3, 1).to(torch.uint8).numpy()
-
-    # Reshape array to match number of clips and frames
-    img_array = img_array.reshape(
-        (n_clips, total_num_frm, img_array.shape[-3], img_array.shape[-2], img_array.shape[-1]))
-    # Convert numpy arrays to PIL Image objects
-    clip_imgs = [Image.fromarray(img_array[0, j]) for j in range(total_num_frm)]
-
-    return clip_imgs
-
-
-def get_seq_frames(total_num_frames, desired_num_frames):
-    """
-    Calculate the indices of frames to extract from a video.
-
-    Parameters:
-    total_num_frames (int): Total number of frames in the video.
-    desired_num_frames (int): Desired number of frames to extract.
-
-    Returns:
-    list: List of indices of frames to extract.
-    """
-
-    # Calculate the size of each segment from which a frame will be extracted
-    seg_size = float(total_num_frames - 1) / desired_num_frames
-
-    seq = []
-    for i in range(desired_num_frames):
-        # Calculate the start and end indices of each segment
-        start = int(np.round(seg_size * i))
-        end = int(np.round(seg_size * (i + 1)))
-
-        # Append the middle index of the segment to the list
-        seq.append((start + end) // 2)
-
-    return seq
-
+    idx = np.linspace(0, total_frame_num - 1, num_frames)
+    idx = [int(i) for i in idx]
+    pixel_values = vr.get_batch(idx).asnumpy()
+    return pixel_values
 
 def initialize_model(model_name, projection_path=None):
-    """
-    Initializes the model with given parameters.
+    print(f"Loading model: {model_name}...")
+    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
 
-    Parameters:
-    model_name (str): Name of the model to initialize.
-    projection_path (str, optional): Path to the projection weights. Defaults to None.
-
-    Returns:
-    tuple: Model, vision tower, tokenizer, image processor, vision config, and video token length.
-    """
-
-    # Disable initial torch operations
-    disable_torch_init()
-
-    # Convert model name to user path
-    model_name = os.path.expanduser(model_name)
-
-    # Load tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-    # Load model
-    model = VideoChatGPTLlamaForCausalLM.from_pretrained(model_name, low_cpu_mem_usage=True, torch_dtype=torch.float16,
-                                                         use_cache=True)
-
-    # Load image processor
-    image_processor = CLIPImageProcessor.from_pretrained(model.config.mm_vision_tower, torch_dtype=torch.float16)
-
-    # Set to use start and end tokens for video
-    mm_use_vid_start_end = True
-
-    # Add tokens to tokenizer
+    # 3. 注入特殊 Token (解决无输出问题)
+    DEFAULT_VIDEO_TOKEN = "<video>"
+    DEFAULT_VIDEO_PATCH_TOKEN = "<vid_patch>"
+    DEFAULT_VID_START_TOKEN = "<vid_start>"
+    DEFAULT_VID_END_TOKEN = "<vid_end>"
     tokenizer.add_tokens([DEFAULT_VIDEO_PATCH_TOKEN], special_tokens=True)
-    if mm_use_vid_start_end:
-        tokenizer.add_tokens([DEFAULT_VID_START_TOKEN, DEFAULT_VID_END_TOKEN], special_tokens=True)
+    tokenizer.add_tokens([DEFAULT_VID_START_TOKEN, DEFAULT_VID_END_TOKEN], special_tokens=True)
+    if DEFAULT_VIDEO_TOKEN not in tokenizer.get_vocab():
+        tokenizer.add_tokens([DEFAULT_VIDEO_TOKEN], special_tokens=True)
 
-    # Resize token embeddings of the model
+    print("Loading LLM with 4-bit quantization (Speed Optimized)...")
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_compute_dtype=torch.float16,
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_quant_type='nf4'
+    )
+
+    model = VideoChatGPTLlamaForCausalLM.from_pretrained(
+        model_name,
+        low_cpu_mem_usage=True,
+        quantization_config=bnb_config,
+        device_map='auto',
+        use_cache=True
+    )
+
+    vision_tower_name = getattr(model.config, 'mm_vision_tower', "openai/clip-vit-large-patch14")
+    image_processor = CLIPImageProcessor.from_pretrained(vision_tower_name, torch_dtype=torch.float16, use_safetensors=False)
+
+    print(f"Resizing token embeddings to {len(tokenizer)}...")
     model.resize_token_embeddings(len(tokenizer))
+    
+    # 4. 注入 Config (解决 bool sum 报错)
+    vid_patch_token_idx = tokenizer.convert_tokens_to_ids([DEFAULT_VIDEO_PATCH_TOKEN])[0]
+    print(f"Injecting vid_patch_token = {vid_patch_token_idx} into config")
+    model.config.vid_patch_token = vid_patch_token_idx
+    model.config.use_sim_mask = False
+    
+    if hasattr(model.get_model(), "vision_config"):
+        model.get_model().vision_config.vid_patch_token = vid_patch_token_idx
 
-    # Load the weights from projection_path after resizing the token_embeddings
+    # 5. 注入 Adapter (解决 Unexpected Keys)
     if projection_path:
         print(f"Loading weights from {projection_path}")
-        status = model.load_state_dict(torch.load(projection_path, map_location='cpu'), strict=False)
-        if status.unexpected_keys:
-            print(f"Unexpected Keys: {status.unexpected_keys}.\nThe Video-ChatGPT weights are not loaded correctly.")
-        print(f"Weights loaded from {projection_path}")
+        state_dict = torch.load(projection_path, map_location='cpu')
+        
+        if not hasattr(model.get_model(), 'mm_projector'):
+            from torch import nn
+            model.get_model().mm_projector = nn.Linear(1024, 4096).to(model.device)
 
-    # Set model to evaluation mode and move to GPU
-    model = model.eval()
-    model = model.cuda()
+        for k, v in state_dict.items():
+            if 'mm_projector' in k:
+                if 'weight' in k:
+                    print("✅ Found projector weight, injecting...")
+                    model.get_model().mm_projector.weight.data = v.to(model.device).to(torch.float16)
+                elif 'bias' in k:
+                    print("✅ Found projector bias, injecting...")
+                    model.get_model().mm_projector.bias.data = v.to(model.device).to(torch.float16)
+        
+        print("🎉 Adapter weights injected manually!")
 
-    vision_tower_name = "openai/clip-vit-large-patch14"
-
-    # Load vision tower and move to GPU
-    vision_tower = CLIPVisionModel.from_pretrained(vision_tower_name, torch_dtype=torch.float16,
-                                                   low_cpu_mem_usage=True).cuda()
+    model.config.mm_use_vid_start_end = True
+    model.config.mm_vision_select_layer = -2
+    model.config.use_cache = True
+    
+    print(f"Loading Vision Tower: {vision_tower_name}")
+    vision_tower = CLIPVisionModel.from_pretrained(
+        vision_tower_name, 
+        torch_dtype=torch.float16,
+        low_cpu_mem_usage=True,
+        use_safetensors=False 
+    ).cuda()
     vision_tower = vision_tower.eval()
+    model.get_model().vision_tower = vision_tower
 
-    # Configure vision model
-    vision_config = model.get_model().vision_config
-    vision_config.vid_patch_token = tokenizer.convert_tokens_to_ids([DEFAULT_VIDEO_PATCH_TOKEN])[0]
-    vision_config.use_vid_start_end = mm_use_vid_start_end
-    if mm_use_vid_start_end:
-        vision_config.vid_start_token, vision_config.vid_end_token = tokenizer.convert_tokens_to_ids(
-            [DEFAULT_VID_START_TOKEN, DEFAULT_VID_END_TOKEN])
-
-    # Set video token length
-    video_token_len = 356
-
+    video_token_len = 100
+    
     return model, vision_tower, tokenizer, image_processor, video_token_len

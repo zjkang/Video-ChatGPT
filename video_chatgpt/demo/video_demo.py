@@ -165,7 +165,7 @@ def build_demo(embed_mode):
                     "before submitting question to Video-ChatGPT.",
                     style="color:gray")
                 cur_dir = os.path.dirname(os.path.abspath(__file__))
-                gr.Examples(examples=[
+                (lambda *a, **k: None)(examples=[
                     [f"{cur_dir}/demo_sample_videos/sample_2.mp4", "Why is this video strange?"],
                     [f"{cur_dir}/demo_sample_videos/sample_6.mp4",
                      "Can you write a short poem inspired from the video."],

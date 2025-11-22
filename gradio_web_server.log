@@ -1,0 +1,1282 @@
+2025-11-21 01:40:32 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 01:40:32 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 01:40:32 | WARNING | transformers.configuration_utils | You are using a model of type llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 01:40:32 | WARNING | transformers.configuration_utils | You are using a model of type llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 01:40:34 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 01:41:04 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:29<00:59, 29.81s/it]
+2025-11-21 01:41:43 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [01:09<00:35, 35.56s/it]
+2025-11-21 01:42:05 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:30<00:00, 29.01s/it]
+2025-11-21 01:42:05 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:30<00:00, 30.21s/it]
+2025-11-21 01:42:05 | ERROR | stderr | 
+2025-11-21 01:42:05 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 01:42:05 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 01:42:05 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 01:42:05 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 108, in initialize_model
+2025-11-21 01:42:05 | ERROR | stderr |     image_processor = CLIPImageProcessor.from_pretrained(model.config.mm_vision_tower, torch_dtype=torch.float16)
+2025-11-21 01:42:05 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/configuration_utils.py", line 260, in __getattribute__
+2025-11-21 01:42:05 | ERROR | stderr |     return super().__getattribute__(key)
+2025-11-21 01:42:05 | ERROR | stderr | AttributeError: 'VideoChatGPTConfig' object has no attribute 'mm_vision_tower'
+2025-11-21 01:48:00 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 01:48:00 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 01:48:00 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 01:48:00 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 01:48:02 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 01:48:30 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:28<00:56, 28.26s/it]
+2025-11-21 01:49:05 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [01:02<00:31, 31.78s/it]
+2025-11-21 01:49:25 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:23<00:00, 26.71s/it]
+2025-11-21 01:49:25 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:23<00:00, 27.73s/it]
+2025-11-21 01:49:25 | ERROR | stderr | 
+2025-11-21 01:49:25 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py:186: UserWarning: The `resume_download` argument is deprecated and ignored in `hf_hub_download`. Downloads always resume whenever possible.
+2025-11-21 01:49:25 | ERROR | stderr |   warnings.warn(
+2025-11-21 01:49:25 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 01:49:25 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/image_processing_utils.py", line 268, in get_image_processor_dict
+2025-11-21 01:49:25 | ERROR | stderr |     resolved_image_processor_file = cached_file(
+2025-11-21 01:49:25 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/utils/hub.py", line 409, in cached_file
+2025-11-21 01:49:25 | ERROR | stderr |     resolved_file = hf_hub_download(
+2025-11-21 01:49:25 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+2025-11-21 01:49:25 | ERROR | stderr |     return fn(*args, **kwargs)
+2025-11-21 01:49:25 | ERROR | stderr | TypeError: hf_hub_download() got an unexpected keyword argument 'use_auth_token'
+2025-11-21 01:49:25 | ERROR | stderr | 
+2025-11-21 01:49:25 | ERROR | stderr | During handling of the above exception, another exception occurred:
+2025-11-21 01:49:25 | ERROR | stderr | 
+2025-11-21 01:49:25 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 01:49:25 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 01:49:25 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 01:49:25 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 108, in initialize_model
+2025-11-21 01:49:25 | ERROR | stderr |     image_processor = CLIPImageProcessor.from_pretrained(model.config.mm_vision_tower, torch_dtype=torch.float16)
+2025-11-21 01:49:25 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/image_processing_utils.py", line 164, in from_pretrained
+2025-11-21 01:49:25 | ERROR | stderr |     image_processor_dict, kwargs = cls.get_image_processor_dict(pretrained_model_name_or_path, **kwargs)
+2025-11-21 01:49:25 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/image_processing_utils.py", line 287, in get_image_processor_dict
+2025-11-21 01:49:25 | ERROR | stderr |     raise EnvironmentError(
+2025-11-21 01:49:25 | ERROR | stderr | OSError: Can't load image processor for 'openai/clip-vit-large-patch14'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'openai/clip-vit-large-patch14' is the correct path to a directory containing a preprocessor_config.json file
+2025-11-21 01:52:21 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 01:52:21 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 01:52:22 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 01:52:22 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 01:52:23 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 01:52:52 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:28<00:56, 28.21s/it]
+2025-11-21 01:53:25 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [01:01<00:31, 31.49s/it]
+2025-11-21 01:53:46 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:22<00:00, 26.45s/it]
+2025-11-21 01:53:46 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:22<00:00, 27.48s/it]
+2025-11-21 01:53:46 | ERROR | stderr | 
+2025-11-21 01:53:47 | ERROR | stderr | preprocessor_config.json:   0%|                                                                                                                                                           | 0.00/316 [00:00<?, ?B/s]
+2025-11-21 01:53:47 | ERROR | stderr | preprocessor_config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 316/316 [00:00<00:00, 451kB/s]
+2025-11-21 01:53:47 | ERROR | stderr | 
+2025-11-21 01:53:58 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 01:54:00 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 01:54:00 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 01:54:00 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 01:54:00 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 124, in initialize_model
+2025-11-21 01:54:00 | ERROR | stderr |     status = model.load_state_dict(torch.load(projection_path, map_location='cpu'), strict=False)
+2025-11-21 01:54:00 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2629, in load_state_dict
+2025-11-21 01:54:00 | ERROR | stderr |     raise RuntimeError(
+2025-11-21 01:54:00 | ERROR | stderr | RuntimeError: Error(s) in loading state_dict for VideoChatGPTLlamaForCausalLM:
+2025-11-21 01:54:00 | ERROR | stderr | 	size mismatch for model.embed_tokens.weight: copying a param with shape torch.Size([32006, 4096]) from checkpoint, the shape in current model is torch.Size([32004, 4096]).
+2025-11-21 01:56:47 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 01:56:47 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 01:56:47 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 01:56:47 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 01:56:47 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 01:56:47 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 01:56:47 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 01:56:47 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 104, in initialize_model
+2025-11-21 01:56:47 | ERROR | stderr |     model = VideoChatGPTLlamaForCausalLM.from_pretrained(model_name, low_cpu_mem_usage=True, load_in_4bit=True, device_map='auto',
+2025-11-21 01:56:47 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/modeling_utils.py", line 2493, in from_pretrained
+2025-11-21 01:56:47 | ERROR | stderr |     model = cls(config, *model_args, **model_kwargs)
+2025-11-21 01:56:47 | ERROR | stderr | TypeError: VideoChatGPTLlamaForCausalLM.__init__() got an unexpected keyword argument 'load_in_4bit'
+2025-11-21 02:10:20 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 02:10:20 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 02:10:20 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 02:10:20 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 02:10:21 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 02:10:21 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 104, in initialize_model
+2025-11-21 02:10:21 | ERROR | stderr |     model = VideoChatGPTLlamaForCausalLM.from_pretrained(model_name, low_cpu_mem_usage=True, load_in_4bit=True, device_map='auto',
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/modeling_utils.py", line 2700, in from_pretrained
+2025-11-21 02:10:21 | ERROR | stderr |     model = cls(config, *model_args, **model_kwargs)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 161, in __init__
+2025-11-21 02:10:21 | ERROR | stderr |     self.model = VideoChatGPTLlamaModel(config)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 33, in __init__
+2025-11-21 02:10:21 | ERROR | stderr |     super(VideoChatGPTLlamaModel, self).__init__(config)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 560, in __init__
+2025-11-21 02:10:21 | ERROR | stderr |     self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, self.padding_idx)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/sparse.py", line 172, in __init__
+2025-11-21 02:10:21 | ERROR | stderr |     self.reset_parameters()
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/sparse.py", line 183, in reset_parameters
+2025-11-21 02:10:21 | ERROR | stderr |     init.normal_(self.weight)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/init.py", line 264, in normal_
+2025-11-21 02:10:21 | ERROR | stderr |     return _no_grad_normal_(tensor, mean, std, generator)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/init.py", line 82, in _no_grad_normal_
+2025-11-21 02:10:21 | ERROR | stderr |     return tensor.normal_(mean, std, generator=generator)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_refs/__init__.py", line 6328, in normal_
+2025-11-21 02:10:21 | ERROR | stderr |     return normal(mean, std, self.shape, out=self, generator=generator)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_prims_common/wrappers.py", line 309, in _fn
+2025-11-21 02:10:21 | ERROR | stderr |     result = fn(*args, **kwargs)
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_compile.py", line 46, in inner
+2025-11-21 02:10:21 | ERROR | stderr |     import torch._dynamo
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_dynamo/__init__.py", line 13, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from . import (
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_dynamo/aot_compile.py", line 15, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from . import convert_frame
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 57, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from torch._dynamo.symbolic_convert import TensorifyState
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 59, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from . import (
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_dynamo/trace_rules.py", line 43, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     import torch._inductor.test_operators
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_inductor/__init__.py", line 11, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from .standalone_compile import CompiledArtifact  # noqa: TC001
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_inductor/standalone_compile.py", line 13, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from torch._inductor.cpp_builder import normalize_path_separator
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_inductor/cpp_builder.py", line 30, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from torch._inductor.cpu_vec_isa import invalid_vec_isa, VecISA
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_inductor/cpu_vec_isa.py", line 14, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from torch._inductor.utils import python_subprocess_env
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_inductor/utils.py", line 64, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     from torch._inductor.runtime.hints import DeviceProperties
+2025-11-21 02:10:21 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/_inductor/runtime/hints.py", line 40, in <module>
+2025-11-21 02:10:21 | ERROR | stderr |     import triton.backends.compiler
+2025-11-21 02:10:21 | ERROR | stderr | ModuleNotFoundError: No module named 'triton.backends'
+2025-11-21 02:24:43 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 02:24:43 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 02:24:43 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 02:24:43 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 02:24:43 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/2 [00:00<?, ?it/s]
+2025-11-21 02:24:43 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/2 [00:00<?, ?it/s]
+2025-11-21 02:24:43 | ERROR | stderr | 
+2025-11-21 02:24:43 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 02:24:43 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 02:24:43 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 02:24:43 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 104, in initialize_model
+2025-11-21 02:24:43 | ERROR | stderr |     model = VideoChatGPTLlamaForCausalLM.from_pretrained(model_name, low_cpu_mem_usage=True, load_in_4bit=True, device_map='auto',
+2025-11-21 02:24:43 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/modeling_utils.py", line 2903, in from_pretrained
+2025-11-21 02:24:43 | ERROR | stderr |     ) = cls._load_pretrained_model(
+2025-11-21 02:24:43 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/modeling_utils.py", line 3246, in _load_pretrained_model
+2025-11-21 02:24:43 | ERROR | stderr |     state_dict = load_state_dict(shard_file)
+2025-11-21 02:24:43 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/modeling_utils.py", line 447, in load_state_dict
+2025-11-21 02:24:43 | ERROR | stderr |     with safe_open(checkpoint_file, framework="pt") as f:
+2025-11-21 02:24:43 | ERROR | stderr | FileNotFoundError: No such file or directory: ./checkpoints/Llama-2-7b-chat-hf/model-00001-of-00002.safetensors
+2025-11-21 02:26:01 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 02:26:01 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 02:26:01 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 02:26:01 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 02:26:02 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 02:26:31 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:29<00:59, 29.55s/it]
+2025-11-21 02:26:58 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:56<00:28, 28.11s/it]
+2025-11-21 02:27:17 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:15<00:00, 23.96s/it]
+2025-11-21 02:27:17 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:15<00:00, 25.23s/it]
+2025-11-21 02:27:17 | ERROR | stderr | 
+2025-11-21 02:27:19 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 02:27:20 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 02:27:20 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 02:27:20 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 02:27:20 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 124, in initialize_model
+2025-11-21 02:27:20 | ERROR | stderr |     status = model.load_state_dict(torch.load(projection_path, map_location='cpu'), strict=False)
+2025-11-21 02:27:20 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2152, in load_state_dict
+2025-11-21 02:27:20 | ERROR | stderr |     raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+2025-11-21 02:27:20 | ERROR | stderr | RuntimeError: Error(s) in loading state_dict for VideoChatGPTLlamaForCausalLM:
+2025-11-21 02:27:20 | ERROR | stderr | 	size mismatch for model.embed_tokens.weight: copying a param with shape torch.Size([32006, 4096]) from checkpoint, the shape in current model is torch.Size([32004, 4096]).
+2025-11-21 02:45:34 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 02:45:34 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 02:45:34 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 02:45:34 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 02:45:34 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 02:46:04 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:29<00:59, 29.91s/it]
+2025-11-21 02:46:32 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:57<00:28, 28.68s/it]
+2025-11-21 02:46:51 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 24.32s/it]
+2025-11-21 02:46:51 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.62s/it]
+2025-11-21 02:46:51 | ERROR | stderr | 
+2025-11-21 02:46:54 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 02:46:55 | INFO | stdout | Unexpected Keys: ['model.mm_projector.weight', 'model.mm_projector.bias'].
+2025-11-21 02:46:55 | INFO | stdout | The Video-ChatGPT weights are not loaded correctly.
+2025-11-21 02:46:55 | INFO | stdout | Weights loaded from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 02:46:56 | ERROR | stderr | config.json: 0.00B [00:00, ?B/s]
+2025-11-21 02:46:56 | ERROR | stderr | config.json: 4.52kB [00:00, 15.1MB/s]
+2025-11-21 02:46:56 | ERROR | stderr | 
+2025-11-21 02:46:57 | ERROR | stderr | model.safetensors:   0%|                                                                                                                                                                | 0.00/1.71G [00:00<?, ?B/s]
+2025-11-21 02:47:22 | ERROR | stderr | model.safetensors:   1%|▉                                                                                                                                                     | 10.5M/1.71G [00:25<1:07:49, 418kB/s]
+2025-11-21 02:47:34 | ERROR | stderr | model.safetensors:   1%|▉                                                                                                                                                     | 10.5M/1.71G [00:36<1:07:49, 418kB/s]
+2025-11-21 02:47:50 | ERROR | stderr | model.safetensors:   1%|█▊                                                                                                                                                    | 21.0M/1.71G [00:52<1:11:12, 395kB/s]
+2025-11-21 02:48:04 | ERROR | stderr | model.safetensors:   1%|█▊                                                                                                                                                    | 21.0M/1.71G [01:06<1:11:12, 395kB/s]
+2025-11-21 02:48:16 | ERROR | stderr | model.safetensors:   2%|██▊                                                                                                                                                   | 31.5M/1.71G [01:19<1:10:41, 396kB/s]
+2025-11-21 02:48:34 | ERROR | stderr | model.safetensors:   2%|██▊                                                                                                                                                   | 31.5M/1.71G [01:36<1:10:41, 396kB/s]
+2025-11-21 02:48:43 | ERROR | stderr | model.safetensors:   2%|███▋                                                                                                                                                  | 41.9M/1.71G [01:45<1:10:11, 396kB/s]
+2025-11-21 02:48:54 | ERROR | stderr | model.safetensors:   2%|███▋                                                                                                                                                  | 41.9M/1.71G [01:56<1:10:11, 396kB/s]
+2025-11-21 02:49:09 | ERROR | stderr | model.safetensors:   3%|████▌                                                                                                                                                 | 52.4M/1.71G [02:11<1:09:39, 397kB/s]
+2025-11-21 02:49:24 | ERROR | stderr | model.safetensors:   3%|████▌                                                                                                                                                 | 52.4M/1.71G [02:27<1:09:39, 397kB/s]
+2025-11-21 02:49:37 | ERROR | stderr | model.safetensors:   4%|█████▌                                                                                                                                                | 62.9M/1.71G [02:39<1:10:02, 392kB/s]
+2025-11-21 02:49:54 | ERROR | stderr | model.safetensors:   4%|█████▌                                                                                                                                                | 62.9M/1.71G [02:57<1:10:02, 392kB/s]
+2025-11-21 02:50:04 | ERROR | stderr | model.safetensors:   4%|██████▍                                                                                                                                               | 73.4M/1.71G [03:06<1:09:53, 390kB/s]
+2025-11-21 02:50:14 | ERROR | stderr | model.safetensors:   4%|██████▍                                                                                                                                               | 73.4M/1.71G [03:17<1:09:53, 390kB/s]
+2025-11-21 02:50:29 | ERROR | stderr | model.safetensors:   5%|███████▎                                                                                                                                              | 83.9M/1.71G [03:32<1:08:29, 396kB/s]
+2025-11-21 02:50:44 | ERROR | stderr | model.safetensors:   5%|███████▎                                                                                                                                              | 83.9M/1.71G [03:47<1:08:29, 396kB/s]
+2025-11-21 02:50:51 | ERROR | stderr | model.safetensors:   5%|███████▎                                                                                                                                              | 83.9M/1.71G [03:53<1:15:35, 359kB/s]
+2025-11-21 02:50:51 | ERROR | stderr | 
+2025-11-21 02:50:51 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 02:50:51 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 02:50:51 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 140, in initialize_model
+2025-11-21 02:50:51 | ERROR | stderr |     vision_tower = CLIPVisionModel.from_pretrained(vision_tower_name, torch_dtype=torch.float16,
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/modeling_utils.py", line 2519, in from_pretrained
+2025-11-21 02:50:51 | ERROR | stderr |     resolved_archive_file = cached_file(pretrained_model_name_or_path, filename, **cached_file_kwargs)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/utils/hub.py", line 417, in cached_file
+2025-11-21 02:50:51 | ERROR | stderr |     resolved_file = hf_hub_download(
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+2025-11-21 02:50:51 | ERROR | stderr |     return fn(*args, **kwargs)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+2025-11-21 02:50:51 | ERROR | stderr |     http_get(
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 541, in http_get
+2025-11-21 02:50:51 | ERROR | stderr |     for chunk in r.iter_content(chunk_size=DOWNLOAD_CHUNK_SIZE):
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/requests/models.py", line 816, in generate
+2025-11-21 02:50:51 | ERROR | stderr |     yield from self.raw.stream(chunk_size, decode_content=True)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/urllib3/response.py", line 1091, in stream
+2025-11-21 02:50:51 | ERROR | stderr |     data = self.read(amt=amt, decode_content=decode_content)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/urllib3/response.py", line 980, in read
+2025-11-21 02:50:51 | ERROR | stderr |     data = self._raw_read(amt)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/urllib3/response.py", line 904, in _raw_read
+2025-11-21 02:50:51 | ERROR | stderr |     data = self._fp_read(amt, read1=read1) if not fp_closed else b""
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/urllib3/response.py", line 887, in _fp_read
+2025-11-21 02:50:51 | ERROR | stderr |     return self._fp.read(amt) if amt is not None else self._fp.read()
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/http/client.py", line 466, in read
+2025-11-21 02:50:51 | ERROR | stderr |     s = self.fp.read(amt)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/socket.py", line 717, in readinto
+2025-11-21 02:50:51 | ERROR | stderr |     return self._sock.recv_into(b)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/ssl.py", line 1307, in recv_into
+2025-11-21 02:50:51 | ERROR | stderr |     return self.read(nbytes, buffer)
+2025-11-21 02:50:51 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/ssl.py", line 1163, in read
+2025-11-21 02:50:51 | ERROR | stderr |     return self._sslobj.read(len, buffer)
+2025-11-21 02:50:51 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 03:05:17 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:05:17 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:05:17 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:05:17 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:05:17 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:05:17 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:05:18 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:05:49 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:30<01:01, 30.78s/it]
+2025-11-21 03:06:16 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:58<00:28, 28.76s/it]
+2025-11-21 03:06:35 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 24.13s/it]
+2025-11-21 03:06:35 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.58s/it]
+2025-11-21 03:06:35 | ERROR | stderr | 
+2025-11-21 03:06:36 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:06:37 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:06:38 | INFO | stdout | ⚠️ Warning: mm_projector not initialized in model! Initializing manual Linear layer...
+2025-11-21 03:06:38 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:06:38 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:06:38 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:06:38 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:06:40 | ERROR | stderr | model.safetensors:   0%|                                                                                                                                                                | 0.00/1.71G [00:00<?, ?B/s]
+2025-11-21 03:06:43 | ERROR | stderr | model.safetensors:   1%|▉                                                                                                                                                      | 10.5M/1.71G [00:03<08:22, 3.38MB/s]
+2025-11-21 03:06:46 | ERROR | stderr | model.safetensors:   1%|█▊                                                                                                                                                     | 21.0M/1.71G [00:05<07:47, 3.62MB/s]
+2025-11-21 03:06:49 | ERROR | stderr | model.safetensors:   2%|██▊                                                                                                                                                    | 31.5M/1.71G [00:08<07:32, 3.71MB/s]
+2025-11-21 03:06:51 | ERROR | stderr | model.safetensors:   2%|███▋                                                                                                                                                   | 41.9M/1.71G [00:11<07:24, 3.75MB/s]
+2025-11-21 03:06:54 | ERROR | stderr | model.safetensors:   3%|████▋                                                                                                                                                  | 52.4M/1.71G [00:14<07:19, 3.77MB/s]
+2025-11-21 03:06:57 | ERROR | stderr | model.safetensors:   4%|█████▌                                                                                                                                                 | 62.9M/1.71G [00:16<07:15, 3.79MB/s]
+2025-11-21 03:07:00 | ERROR | stderr | model.safetensors:   4%|██████▍                                                                                                                                                | 73.4M/1.71G [00:19<07:11, 3.79MB/s]
+2025-11-21 03:07:02 | ERROR | stderr | model.safetensors:   5%|███████▍                                                                                                                                               | 83.9M/1.71G [00:22<07:08, 3.80MB/s]
+2025-11-21 03:07:05 | ERROR | stderr | model.safetensors:   6%|████████▎                                                                                                                                              | 94.4M/1.71G [00:25<07:04, 3.80MB/s]
+2025-11-21 03:07:08 | ERROR | stderr | model.safetensors:   6%|█████████▎                                                                                                                                              | 105M/1.71G [00:27<07:01, 3.81MB/s]
+2025-11-21 03:07:11 | ERROR | stderr | model.safetensors:   7%|██████████▏                                                                                                                                             | 115M/1.71G [00:30<06:58, 3.81MB/s]
+2025-11-21 03:07:13 | ERROR | stderr | model.safetensors:   7%|███████████▏                                                                                                                                            | 126M/1.71G [00:33<06:56, 3.81MB/s]
+2025-11-21 03:07:16 | ERROR | stderr | model.safetensors:   8%|████████████                                                                                                                                            | 136M/1.71G [00:36<06:53, 3.81MB/s]
+2025-11-21 03:07:19 | ERROR | stderr | model.safetensors:   9%|█████████████                                                                                                                                           | 147M/1.71G [00:38<06:50, 3.81MB/s]
+2025-11-21 03:07:22 | ERROR | stderr | model.safetensors:   9%|█████████████▉                                                                                                                                          | 157M/1.71G [00:41<06:47, 3.81MB/s]
+2025-11-21 03:07:24 | ERROR | stderr | model.safetensors:  10%|██████████████▉                                                                                                                                         | 168M/1.71G [00:44<06:44, 3.81MB/s]
+2025-11-21 03:07:27 | ERROR | stderr | model.safetensors:  10%|███████████████▊                                                                                                                                        | 178M/1.71G [00:47<06:42, 3.81MB/s]
+2025-11-21 03:07:30 | ERROR | stderr | model.safetensors:  11%|████████████████▊                                                                                                                                       | 189M/1.71G [00:49<06:39, 3.81MB/s]
+2025-11-21 03:07:33 | ERROR | stderr | model.safetensors:  12%|█████████████████▋                                                                                                                                      | 199M/1.71G [00:52<06:36, 3.81MB/s]
+2025-11-21 03:07:35 | ERROR | stderr | model.safetensors:  12%|██████████████████▋                                                                                                                                     | 210M/1.71G [00:55<06:33, 3.81MB/s]
+2025-11-21 03:07:38 | ERROR | stderr | model.safetensors:  13%|███████████████████▌                                                                                                                                    | 220M/1.71G [00:58<06:30, 3.81MB/s]
+2025-11-21 03:07:41 | ERROR | stderr | model.safetensors:  13%|████████████████████▍                                                                                                                                   | 231M/1.71G [01:00<06:28, 3.81MB/s]
+2025-11-21 03:07:44 | ERROR | stderr | model.safetensors:  14%|█████████████████████▍                                                                                                                                  | 241M/1.71G [01:03<06:25, 3.81MB/s]
+2025-11-21 03:07:46 | ERROR | stderr | model.safetensors:  15%|██████████████████████▎                                                                                                                                 | 252M/1.71G [01:06<06:22, 3.81MB/s]
+2025-11-21 03:07:49 | ERROR | stderr | model.safetensors:  15%|███████████████████████▎                                                                                                                                | 262M/1.71G [01:09<06:19, 3.81MB/s]
+2025-11-21 03:07:52 | ERROR | stderr | model.safetensors:  16%|████████████████████████▏                                                                                                                               | 273M/1.71G [01:11<06:17, 3.81MB/s]
+2025-11-21 03:07:55 | ERROR | stderr | model.safetensors:  17%|█████████████████████████▏                                                                                                                              | 283M/1.71G [01:14<06:14, 3.81MB/s]
+2025-11-21 03:07:57 | ERROR | stderr | model.safetensors:  17%|██████████████████████████                                                                                                                              | 294M/1.71G [01:17<06:11, 3.81MB/s]
+2025-11-21 03:08:00 | ERROR | stderr | model.safetensors:  18%|███████████████████████████                                                                                                                             | 304M/1.71G [01:20<06:08, 3.81MB/s]
+2025-11-21 03:08:03 | ERROR | stderr | model.safetensors:  18%|███████████████████████████▉                                                                                                                            | 315M/1.71G [01:22<06:06, 3.81MB/s]
+2025-11-21 03:08:06 | ERROR | stderr | model.safetensors:  19%|████████████████████████████▉                                                                                                                           | 325M/1.71G [01:25<06:03, 3.81MB/s]
+2025-11-21 03:08:08 | ERROR | stderr | model.safetensors:  20%|█████████████████████████████▊                                                                                                                          | 336M/1.71G [01:28<06:00, 3.81MB/s]
+2025-11-21 03:08:11 | ERROR | stderr | model.safetensors:  20%|██████████████████████████████▋                                                                                                                         | 346M/1.71G [01:31<05:57, 3.81MB/s]
+2025-11-21 03:08:14 | ERROR | stderr | model.safetensors:  21%|███████████████████████████████▋                                                                                                                        | 357M/1.71G [01:33<05:55, 3.81MB/s]
+2025-11-21 03:08:17 | ERROR | stderr | model.safetensors:  21%|████████████████████████████████▌                                                                                                                       | 367M/1.71G [01:36<05:52, 3.81MB/s]
+2025-11-21 03:08:19 | ERROR | stderr | model.safetensors:  22%|█████████████████████████████████▌                                                                                                                      | 377M/1.71G [01:39<05:49, 3.81MB/s]
+2025-11-21 03:08:22 | ERROR | stderr | model.safetensors:  23%|██████████████████████████████████▍                                                                                                                     | 388M/1.71G [01:42<05:46, 3.81MB/s]
+2025-11-21 03:08:25 | ERROR | stderr | model.safetensors:  23%|███████████████████████████████████▍                                                                                                                    | 398M/1.71G [01:44<05:44, 3.81MB/s]
+2025-11-21 03:08:28 | ERROR | stderr | model.safetensors:  24%|████████████████████████████████████▎                                                                                                                   | 409M/1.71G [01:47<05:41, 3.81MB/s]
+2025-11-21 03:08:28 | ERROR | stderr | model.safetensors:  24%|████████████████████████████████████▎                                                                                                                   | 409M/1.71G [01:48<05:44, 3.78MB/s]
+2025-11-21 03:08:28 | ERROR | stderr | 
+2025-11-21 03:08:28 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:08:28 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 03:08:28 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 79, in initialize_model
+2025-11-21 03:08:28 | ERROR | stderr |     vision_tower = CLIPVisionModel.from_pretrained(
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/modeling_utils.py", line 2519, in from_pretrained
+2025-11-21 03:08:28 | ERROR | stderr |     resolved_archive_file = cached_file(pretrained_model_name_or_path, filename, **cached_file_kwargs)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/utils/hub.py", line 417, in cached_file
+2025-11-21 03:08:28 | ERROR | stderr |     resolved_file = hf_hub_download(
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+2025-11-21 03:08:28 | ERROR | stderr |     return fn(*args, **kwargs)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+2025-11-21 03:08:28 | ERROR | stderr |     http_get(
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 541, in http_get
+2025-11-21 03:08:28 | ERROR | stderr |     for chunk in r.iter_content(chunk_size=DOWNLOAD_CHUNK_SIZE):
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/requests/models.py", line 816, in generate
+2025-11-21 03:08:28 | ERROR | stderr |     yield from self.raw.stream(chunk_size, decode_content=True)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/urllib3/response.py", line 1091, in stream
+2025-11-21 03:08:28 | ERROR | stderr |     data = self.read(amt=amt, decode_content=decode_content)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/urllib3/response.py", line 980, in read
+2025-11-21 03:08:28 | ERROR | stderr |     data = self._raw_read(amt)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/urllib3/response.py", line 904, in _raw_read
+2025-11-21 03:08:28 | ERROR | stderr |     data = self._fp_read(amt, read1=read1) if not fp_closed else b""
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/urllib3/response.py", line 887, in _fp_read
+2025-11-21 03:08:28 | ERROR | stderr |     return self._fp.read(amt) if amt is not None else self._fp.read()
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/http/client.py", line 466, in read
+2025-11-21 03:08:28 | ERROR | stderr |     s = self.fp.read(amt)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/socket.py", line 717, in readinto
+2025-11-21 03:08:28 | ERROR | stderr |     return self._sock.recv_into(b)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/ssl.py", line 1307, in recv_into
+2025-11-21 03:08:28 | ERROR | stderr |     return self.read(nbytes, buffer)
+2025-11-21 03:08:28 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/ssl.py", line 1163, in read
+2025-11-21 03:08:28 | ERROR | stderr |     return self._sslobj.read(len, buffer)
+2025-11-21 03:08:28 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 03:09:02 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:09:02 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:09:02 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:09:02 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:09:02 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:09:02 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:09:03 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:09:34 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:30<01:01, 30.83s/it]
+2025-11-21 03:10:01 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:57<00:28, 28.58s/it]
+2025-11-21 03:10:19 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 24.02s/it]
+2025-11-21 03:10:19 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.48s/it]
+2025-11-21 03:10:19 | ERROR | stderr | 
+2025-11-21 03:10:20 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:10:21 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:10:22 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:10:22 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:10:22 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:10:22 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:10:29 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:10:29 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 263, in <module>
+2025-11-21 03:10:29 | ERROR | stderr |     model, vision_tower, tokenizer, image_processor, video_token_len = \
+2025-11-21 03:10:29 | ERROR | stderr | ValueError: not enough values to unpack (expected 5, got 3)
+2025-11-21 03:11:54 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:11:54 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:11:54 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:11:54 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:11:54 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:11:54 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:11:55 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:12:23 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:27<00:55, 27.85s/it]
+2025-11-21 03:12:49 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:54<00:27, 27.30s/it]
+2025-11-21 03:13:08 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:13<00:00, 23.23s/it]
+2025-11-21 03:13:08 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:13<00:00, 24.38s/it]
+2025-11-21 03:13:08 | ERROR | stderr | 
+2025-11-21 03:13:09 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:13:09 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:13:11 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:13:11 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:13:11 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:13:11 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:13:17 | INFO | stdout | Initialization Finished
+2025-11-21 03:13:17 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 03:13:17 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:13:17 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:13:17 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 274, in <module>
+2025-11-21 03:13:17 | ERROR | stderr |     demo = build_demo(args.embed)
+2025-11-21 03:13:17 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 168, in build_demo
+2025-11-21 03:13:17 | ERROR | stderr |     gr.Examples(examples=[
+2025-11-21 03:13:17 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/helpers.py", line 54, in create_examples
+2025-11-21 03:13:17 | ERROR | stderr |     examples_obj = Examples(
+2025-11-21 03:13:17 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/helpers.py", line 201, in __init__
+2025-11-21 03:13:17 | ERROR | stderr |     self.processed_examples = [
+2025-11-21 03:13:17 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/helpers.py", line 202, in <listcomp>
+2025-11-21 03:13:17 | ERROR | stderr |     [
+2025-11-21 03:13:17 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/helpers.py", line 203, in <listcomp>
+2025-11-21 03:13:17 | ERROR | stderr |     component.postprocess(sample)
+2025-11-21 03:13:17 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/components.py", line 1991, in postprocess
+2025-11-21 03:13:17 | ERROR | stderr |     y = self.make_temp_copy_if_needed(y)
+2025-11-21 03:13:17 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/processing_utils.py", line 362, in make_temp_copy_if_needed
+2025-11-21 03:13:17 | ERROR | stderr |     temp_dir = self.hash_file(file_path)
+2025-11-21 03:13:17 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/processing_utils.py", line 334, in hash_file
+2025-11-21 03:13:17 | ERROR | stderr |     with open(file_path, "rb") as f:
+2025-11-21 03:13:17 | ERROR | stderr | FileNotFoundError: [Errno 2] No such file or directory: '/root/Video-ChatGPT/video_chatgpt/demo/demo_sample_videos/sample_2.mp4'
+2025-11-21 03:16:19 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:16:19 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:16:19 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:16:19 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:16:19 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:16:19 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:16:20 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:16:48 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:28<00:56, 28.45s/it]
+2025-11-21 03:17:16 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:55<00:27, 27.78s/it]
+2025-11-21 03:17:34 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:14<00:00, 23.62s/it]
+2025-11-21 03:17:34 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:14<00:00, 24.81s/it]
+2025-11-21 03:17:34 | ERROR | stderr | 
+2025-11-21 03:17:35 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:17:36 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:17:37 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:17:37 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:17:37 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:17:37 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:17:44 | INFO | stdout | Initialization Finished
+2025-11-21 03:17:44 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 03:17:44 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:17:44 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 03:18:06 | INFO | stdout | Running on public URL: https://a87e3f971e05639d76.gradio.live
+2025-11-21 03:18:06 | INFO | stdout | 
+2025-11-21 03:18:06 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 03:21:07 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 03:21:42 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:21:42 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 03:21:42 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 03:21:42 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 03:21:42 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 03:21:42 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 884, in call_function
+2025-11-21 03:21:42 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 03:21:42 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 03:21:42 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 03:21:42 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 03:21:42 | ERROR | stderr |     return await future
+2025-11-21 03:21:42 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 03:21:42 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 03:21:42 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 135, in upload_image
+2025-11-21 03:21:42 | ERROR | stderr |     llm_message = chat.upload_video(image, img_list)
+2025-11-21 03:21:42 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 46, in upload_video
+2025-11-21 03:21:42 | ERROR | stderr |     frames = load_video(video)
+2025-11-21 03:21:42 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 9, in load_video
+2025-11-21 03:21:42 | ERROR | stderr |     vr = VideoReader(video_path, ctx=cpu(0))
+2025-11-21 03:21:42 | ERROR | stderr | UnboundLocalError: local variable 'VideoReader' referenced before assignment
+2025-11-21 03:22:06 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:22:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 03:22:06 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 03:22:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 03:22:06 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 03:22:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 884, in call_function
+2025-11-21 03:22:06 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 03:22:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 03:22:06 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 03:22:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 03:22:06 | ERROR | stderr |     return await future
+2025-11-21 03:22:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 03:22:06 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 03:22:06 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 135, in upload_image
+2025-11-21 03:22:06 | ERROR | stderr |     llm_message = chat.upload_video(image, img_list)
+2025-11-21 03:22:06 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 46, in upload_video
+2025-11-21 03:22:06 | ERROR | stderr |     frames = load_video(video)
+2025-11-21 03:22:06 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 9, in load_video
+2025-11-21 03:22:06 | ERROR | stderr |     vr = VideoReader(video_path, ctx=cpu(0))
+2025-11-21 03:22:06 | ERROR | stderr | UnboundLocalError: local variable 'VideoReader' referenced before assignment
+2025-11-21 03:23:16 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 03:23:16 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://a87e3f971e05639d76.gradio.live
+2025-11-21 03:23:53 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:23:53 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:23:53 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:23:53 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:23:53 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:23:53 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:23:54 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:24:24 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:30<01:00, 30.47s/it]
+2025-11-21 03:24:51 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:57<00:28, 28.56s/it]
+2025-11-21 03:25:10 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 24.17s/it]
+2025-11-21 03:25:10 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.55s/it]
+2025-11-21 03:25:10 | ERROR | stderr | 
+2025-11-21 03:25:12 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:25:13 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:25:14 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:25:14 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:25:14 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:25:14 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:25:22 | INFO | stdout | Initialization Finished
+2025-11-21 03:25:22 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 03:25:22 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:25:23 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 03:25:24 | INFO | stdout | Running on public URL: https://6973fa3e8ac407dbec.gradio.live
+2025-11-21 03:25:24 | INFO | stdout | 
+2025-11-21 03:25:24 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 03:28:21 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 03:29:36 | ERROR | asyncio | Task exception was never retrieved
+future: <Task finished name='qzodfysv47_6' coro=<Queue.process_events() done, defined at /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py:343> exception=WebSocketDisconnect(<CloseCode.ABNORMAL_CLOSURE: 1006>, '')>
+Traceback (most recent call last):
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 347, in process_events
+    client_awake = await self.gather_event_data(event)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 220, in gather_event_data
+    data, client_awake = await self.get_message(event, timeout=receive_timeout)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 453, in get_message
+    data = await asyncio.wait_for(
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/asyncio/tasks.py", line 445, in wait_for
+    return fut.result()
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 136, in receive_json
+    self._raise_on_disconnect(message)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 114, in _raise_on_disconnect
+    raise WebSocketDisconnect(message["code"], message.get("reason"))
+starlette.websockets.WebSocketDisconnect: (<CloseCode.ABNORMAL_CLOSURE: 1006>, '')
+2025-11-21 03:30:29 | ERROR | asyncio | Task exception was never retrieved
+future: <Task finished name='qzodfysv47_6' coro=<Queue.process_events() done, defined at /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py:343> exception=WebSocketDisconnect(<CloseCode.ABNORMAL_CLOSURE: 1006>, '')>
+Traceback (most recent call last):
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 347, in process_events
+    client_awake = await self.gather_event_data(event)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 220, in gather_event_data
+    data, client_awake = await self.get_message(event, timeout=receive_timeout)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 453, in get_message
+    data = await asyncio.wait_for(
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/asyncio/tasks.py", line 445, in wait_for
+    return fut.result()
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 136, in receive_json
+    self._raise_on_disconnect(message)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 114, in _raise_on_disconnect
+    raise WebSocketDisconnect(message["code"], message.get("reason"))
+starlette.websockets.WebSocketDisconnect: (<CloseCode.ABNORMAL_CLOSURE: 1006>, '')
+2025-11-21 03:31:57 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 03:31:57 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:31:57 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1735, in block_thread
+2025-11-21 03:31:57 | ERROR | stderr |     time.sleep(0.1)
+2025-11-21 03:31:57 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 03:31:57 | ERROR | stderr | 
+2025-11-21 03:31:57 | ERROR | stderr | During handling of the above exception, another exception occurred:
+2025-11-21 03:31:57 | ERROR | stderr | 
+2025-11-21 03:31:57 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:31:57 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 276, in <module>
+2025-11-21 03:31:57 | ERROR | stderr |     demo.launch(share=True, enable_queue=True)
+2025-11-21 03:31:57 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1652, in launch
+2025-11-21 03:31:57 | ERROR | stderr |     self.block_thread()
+2025-11-21 03:31:57 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1738, in block_thread
+2025-11-21 03:31:57 | ERROR | stderr |     self.server.close()
+2025-11-21 03:31:57 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/networking.py", line 43, in close
+2025-11-21 03:31:57 | ERROR | stderr |     self.thread.join()
+2025-11-21 03:31:57 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1096, in join
+2025-11-21 03:31:57 | ERROR | stderr |     self._wait_for_tstate_lock()
+2025-11-21 03:31:57 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+2025-11-21 03:31:57 | ERROR | stderr |     if lock.acquire(block, timeout):
+2025-11-21 03:31:57 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 03:31:57 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://6973fa3e8ac407dbec.gradio.live
+2025-11-21 03:33:19 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:33:19 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:33:19 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:33:19 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:33:19 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:33:19 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:33:20 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:33:52 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:31<01:03, 31.57s/it]
+2025-11-21 03:34:19 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:59<00:29, 29.19s/it]
+2025-11-21 03:34:38 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:17<00:00, 24.42s/it]
+2025-11-21 03:34:38 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:17<00:00, 25.95s/it]
+2025-11-21 03:34:38 | ERROR | stderr | 
+2025-11-21 03:34:39 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:34:40 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:34:41 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:34:41 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:34:41 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:34:41 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:34:47 | INFO | stdout | Initialization Finished
+2025-11-21 03:34:48 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 03:34:48 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:34:48 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 03:34:49 | INFO | stdout | Running on public URL: https://78a09396e76477d519.gradio.live
+2025-11-21 03:34:49 | INFO | stdout | 
+2025-11-21 03:34:49 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 03:35:18 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 03:36:31 | INFO | gradio_web_server | add_text. ip:. len: 19
+2025-11-21 03:36:34 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py:1270: UserWarning: You have modified the pretrained model configuration to control generation. This is a deprecated strategy to control generation and will be removed soon, in a future version. Please use a generation configuration file (see https://huggingface.co/docs/transformers/main_classes/text_generation )
+2025-11-21 03:36:34 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:36:34 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 03:36:34 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 03:36:34 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 898, in call_function
+2025-11-21 03:36:34 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 03:36:34 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 03:36:34 | ERROR | stderr |     return await future
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 03:36:34 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/utils.py", line 549, in async_iteration
+2025-11-21 03:36:34 | ERROR | stderr |     return next(iterator)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 116, in answer
+2025-11-21 03:36:34 | ERROR | stderr |     output_ids = self.model.generate(
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+2025-11-21 03:36:34 | ERROR | stderr |     return func(*args, **kwargs)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py", line 1588, in generate
+2025-11-21 03:36:34 | ERROR | stderr |     return self.sample(
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py", line 2642, in sample
+2025-11-21 03:36:34 | ERROR | stderr |     outputs = self(
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+2025-11-21 03:36:34 | ERROR | stderr |     return self._call_impl(*args, **kwargs)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+2025-11-21 03:36:34 | ERROR | stderr |     return forward_call(*args, **kwargs)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+2025-11-21 03:36:34 | ERROR | stderr |     output = old_forward(*args, **kwargs)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 191, in forward
+2025-11-21 03:36:34 | ERROR | stderr |     outputs = self.model(
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+2025-11-21 03:36:34 | ERROR | stderr |     return self._call_impl(*args, **kwargs)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+2025-11-21 03:36:34 | ERROR | stderr |     return forward_call(*args, **kwargs)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+2025-11-21 03:36:34 | ERROR | stderr |     output = old_forward(*args, **kwargs)
+2025-11-21 03:36:34 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 91, in forward
+2025-11-21 03:36:34 | ERROR | stderr |     if (cur_input_ids == self.vision_config.vid_patch_token).sum() == 0:
+2025-11-21 03:36:34 | ERROR | stderr | AttributeError: 'bool' object has no attribute 'sum'
+2025-11-21 03:38:00 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 03:38:00 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://78a09396e76477d519.gradio.live
+2025-11-21 03:40:53 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:40:53 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:40:53 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:40:53 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:40:53 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:40:53 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:40:54 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:41:24 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:30<01:01, 30.71s/it]
+2025-11-21 03:41:52 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:58<00:28, 28.86s/it]
+2025-11-21 03:42:11 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 24.15s/it]
+2025-11-21 03:42:11 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.61s/it]
+2025-11-21 03:42:11 | ERROR | stderr | 
+2025-11-21 03:42:11 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:42:12 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:42:13 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:42:14 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:42:14 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:42:14 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:42:20 | INFO | stdout | Initialization Finished
+2025-11-21 03:42:21 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 03:42:21 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:42:21 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 03:42:22 | INFO | stdout | Running on public URL: https://59f527873ab98b4ce8.gradio.live
+2025-11-21 03:42:22 | INFO | stdout | 
+2025-11-21 03:42:22 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 03:42:44 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 03:43:06 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:43:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 987, in postprocess_data
+2025-11-21 03:43:06 | ERROR | stderr |     if predictions[i] is components._Keywords.FINISHED_ITERATING:
+2025-11-21 03:43:06 | ERROR | stderr | IndexError: tuple index out of range
+2025-11-21 03:43:06 | ERROR | stderr | 
+2025-11-21 03:43:06 | ERROR | stderr | During handling of the above exception, another exception occurred:
+2025-11-21 03:43:06 | ERROR | stderr | 
+2025-11-21 03:43:06 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:43:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 03:43:06 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 03:43:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1078, in process_api
+2025-11-21 03:43:06 | ERROR | stderr |     data = self.postprocess_data(fn_index, result["prediction"], state)
+2025-11-21 03:43:06 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 991, in postprocess_data
+2025-11-21 03:43:06 | ERROR | stderr |     raise ValueError(
+2025-11-21 03:43:06 | ERROR | stderr | ValueError: Number of output components does not match number of values returned from from function upload_image
+2025-11-21 03:43:18 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 03:45:47 | INFO | gradio_web_server | add_text. ip:. len: 18
+2025-11-21 03:45:50 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py:1270: UserWarning: You have modified the pretrained model configuration to control generation. This is a deprecated strategy to control generation and will be removed soon, in a future version. Please use a generation configuration file (see https://huggingface.co/docs/transformers/main_classes/text_generation )
+2025-11-21 03:45:50 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:45:50 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 03:45:50 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 03:45:50 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 898, in call_function
+2025-11-21 03:45:50 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 03:45:50 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 03:45:50 | ERROR | stderr |     return await future
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 03:45:50 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/utils.py", line 549, in async_iteration
+2025-11-21 03:45:50 | ERROR | stderr |     return next(iterator)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 116, in answer
+2025-11-21 03:45:50 | ERROR | stderr |     output_ids = self.model.generate(
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+2025-11-21 03:45:50 | ERROR | stderr |     return func(*args, **kwargs)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py", line 1588, in generate
+2025-11-21 03:45:50 | ERROR | stderr |     return self.sample(
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py", line 2642, in sample
+2025-11-21 03:45:50 | ERROR | stderr |     outputs = self(
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+2025-11-21 03:45:50 | ERROR | stderr |     return self._call_impl(*args, **kwargs)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+2025-11-21 03:45:50 | ERROR | stderr |     return forward_call(*args, **kwargs)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+2025-11-21 03:45:50 | ERROR | stderr |     output = old_forward(*args, **kwargs)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 197, in forward
+2025-11-21 03:45:50 | ERROR | stderr |     outputs = self.model(
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+2025-11-21 03:45:50 | ERROR | stderr |     return self._call_impl(*args, **kwargs)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+2025-11-21 03:45:50 | ERROR | stderr |     return forward_call(*args, **kwargs)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+2025-11-21 03:45:50 | ERROR | stderr |     output = old_forward(*args, **kwargs)
+2025-11-21 03:45:50 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 94, in forward
+2025-11-21 03:45:50 | ERROR | stderr |     if (cur_input_ids == self.vision_config.vid_patch_token).sum() == 0:
+2025-11-21 03:45:50 | ERROR | stderr | AttributeError: 'bool' object has no attribute 'sum'
+2025-11-21 03:46:37 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 03:46:38 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://59f527873ab98b4ce8.gradio.live
+2025-11-21 03:47:35 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:47:35 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:47:35 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:47:35 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:47:35 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:47:35 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:47:36 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:48:07 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:31<01:02, 31.31s/it]
+2025-11-21 03:48:35 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:59<00:29, 29.42s/it]
+2025-11-21 03:48:54 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:18<00:00, 24.62s/it]
+2025-11-21 03:48:54 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:18<00:00, 26.11s/it]
+2025-11-21 03:48:54 | ERROR | stderr | 
+2025-11-21 03:48:55 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:48:56 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:48:58 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:48:58 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:48:58 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:48:58 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:49:05 | INFO | stdout | Initialization Finished
+2025-11-21 03:49:05 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 03:49:05 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:49:05 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 03:49:07 | INFO | stdout | Running on public URL: https://ec6902fd5f4017b614.gradio.live
+2025-11-21 03:49:07 | INFO | stdout | 
+2025-11-21 03:49:07 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 03:49:19 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 03:51:01 | INFO | gradio_web_server | add_text. ip:. len: 18
+2025-11-21 03:51:03 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py:1270: UserWarning: You have modified the pretrained model configuration to control generation. This is a deprecated strategy to control generation and will be removed soon, in a future version. Please use a generation configuration file (see https://huggingface.co/docs/transformers/main_classes/text_generation )
+2025-11-21 03:51:03 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:51:03 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 03:51:03 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 03:51:03 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 898, in call_function
+2025-11-21 03:51:03 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 03:51:03 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 03:51:03 | ERROR | stderr |     return await future
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 03:51:03 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/utils.py", line 549, in async_iteration
+2025-11-21 03:51:03 | ERROR | stderr |     return next(iterator)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 116, in answer
+2025-11-21 03:51:03 | ERROR | stderr |     output_ids = self.model.generate(
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+2025-11-21 03:51:03 | ERROR | stderr |     return func(*args, **kwargs)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py", line 1588, in generate
+2025-11-21 03:51:03 | ERROR | stderr |     return self.sample(
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py", line 2642, in sample
+2025-11-21 03:51:03 | ERROR | stderr |     outputs = self(
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+2025-11-21 03:51:03 | ERROR | stderr |     return self._call_impl(*args, **kwargs)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+2025-11-21 03:51:03 | ERROR | stderr |     return forward_call(*args, **kwargs)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+2025-11-21 03:51:03 | ERROR | stderr |     output = old_forward(*args, **kwargs)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 200, in forward
+2025-11-21 03:51:03 | ERROR | stderr |     outputs = self.model(
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+2025-11-21 03:51:03 | ERROR | stderr |     return self._call_impl(*args, **kwargs)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+2025-11-21 03:51:03 | ERROR | stderr |     return forward_call(*args, **kwargs)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+2025-11-21 03:51:03 | ERROR | stderr |     output = old_forward(*args, **kwargs)
+2025-11-21 03:51:03 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 97, in forward
+2025-11-21 03:51:03 | ERROR | stderr |     if (cur_input_ids == self.vision_config.vid_patch_token).sum() == 0:
+2025-11-21 03:51:03 | ERROR | stderr | AttributeError: 'bool' object has no attribute 'sum'
+2025-11-21 03:51:52 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 03:51:52 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://ec6902fd5f4017b614.gradio.live
+2025-11-21 03:54:13 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:54:13 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 03:54:13 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 03:54:13 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 03:54:13 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:54:13 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 03:54:13 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 03:54:44 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:31<01:02, 31.19s/it]
+2025-11-21 03:55:12 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:58<00:28, 28.99s/it]
+2025-11-21 03:55:30 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:17<00:00, 24.14s/it]
+2025-11-21 03:55:30 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:17<00:00, 25.67s/it]
+2025-11-21 03:55:30 | ERROR | stderr | 
+2025-11-21 03:55:31 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 03:55:32 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 03:55:33 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 03:55:33 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 03:55:33 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 03:55:33 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 03:55:40 | INFO | stdout | Initialization Finished
+2025-11-21 03:55:40 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 03:55:40 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:55:40 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 03:55:42 | INFO | stdout | Running on public URL: https://5c47fae188873d5ed6.gradio.live
+2025-11-21 03:55:42 | INFO | stdout | 
+2025-11-21 03:55:42 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 03:55:53 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 03:57:33 | INFO | gradio_web_server | add_text. ip:. len: 18
+2025-11-21 03:57:35 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py:1270: UserWarning: You have modified the pretrained model configuration to control generation. This is a deprecated strategy to control generation and will be removed soon, in a future version. Please use a generation configuration file (see https://huggingface.co/docs/transformers/main_classes/text_generation )
+2025-11-21 03:57:35 | ERROR | stderr |   warnings.warn(
+2025-11-21 03:57:35 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 03:57:35 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 03:57:35 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 898, in call_function
+2025-11-21 03:57:35 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 03:57:35 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 03:57:35 | ERROR | stderr |     return await future
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 03:57:35 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/utils.py", line 549, in async_iteration
+2025-11-21 03:57:35 | ERROR | stderr |     return next(iterator)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 116, in answer
+2025-11-21 03:57:35 | ERROR | stderr |     output_ids = self.model.generate(
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+2025-11-21 03:57:35 | ERROR | stderr |     return func(*args, **kwargs)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py", line 1588, in generate
+2025-11-21 03:57:35 | ERROR | stderr |     return self.sample(
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py", line 2642, in sample
+2025-11-21 03:57:35 | ERROR | stderr |     outputs = self(
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+2025-11-21 03:57:35 | ERROR | stderr |     return self._call_impl(*args, **kwargs)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+2025-11-21 03:57:35 | ERROR | stderr |     return forward_call(*args, **kwargs)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+2025-11-21 03:57:35 | ERROR | stderr |     output = old_forward(*args, **kwargs)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 200, in forward
+2025-11-21 03:57:35 | ERROR | stderr |     outputs = self.model(
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+2025-11-21 03:57:35 | ERROR | stderr |     return self._call_impl(*args, **kwargs)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+2025-11-21 03:57:35 | ERROR | stderr |     return forward_call(*args, **kwargs)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/accelerate/hooks.py", line 165, in new_forward
+2025-11-21 03:57:35 | ERROR | stderr |     output = old_forward(*args, **kwargs)
+2025-11-21 03:57:35 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/model/video_chatgpt.py", line 97, in forward
+2025-11-21 03:57:35 | ERROR | stderr |     if (torch.as_tensor(cur_input_ids, device=self.device) == self.vision_config.vid_patch_token).sum() == 0:
+2025-11-21 03:57:35 | ERROR | stderr | AttributeError: 'bool' object has no attribute 'sum'
+2025-11-21 04:00:19 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 04:00:19 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://5c47fae188873d5ed6.gradio.live
+2025-11-21 04:01:06 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:01:06 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:01:06 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 04:01:06 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 04:01:06 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:01:06 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:01:06 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 04:01:37 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:30<01:01, 30.88s/it]
+2025-11-21 04:02:04 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:57<00:28, 28.49s/it]
+2025-11-21 04:02:22 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 23.84s/it]
+2025-11-21 04:02:22 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.34s/it]
+2025-11-21 04:02:22 | ERROR | stderr | 
+2025-11-21 04:02:23 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 04:02:24 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 04:02:26 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 04:02:26 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 04:02:26 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 04:02:26 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 04:02:32 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:02:32 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 264, in <module>
+2025-11-21 04:02:32 | ERROR | stderr |     initialize_model(args.model_name, args.projection_path)
+2025-11-21 04:02:32 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 76, in initialize_model
+2025-11-21 04:02:32 | ERROR | stderr |     if "<vid_patch>" in tokenizer.vocab:
+2025-11-21 04:02:32 | ERROR | stderr | AttributeError: 'LlamaTokenizer' object has no attribute 'vocab'
+2025-11-21 04:04:15 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:04:15 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:04:15 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 04:04:15 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 04:04:15 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:04:15 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:04:15 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 04:04:44 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:28<00:56, 28.30s/it]
+2025-11-21 04:05:11 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:55<00:27, 27.64s/it]
+2025-11-21 04:05:29 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:13<00:00, 23.46s/it]
+2025-11-21 04:05:29 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:13<00:00, 24.66s/it]
+2025-11-21 04:05:29 | ERROR | stderr | 
+2025-11-21 04:05:30 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 04:05:31 | INFO | stdout | Injecting vid_patch_token = 32005 into config
+2025-11-21 04:05:31 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 04:05:33 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 04:05:33 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 04:05:33 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 04:05:33 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 04:05:40 | INFO | stdout | Initialization Finished
+2025-11-21 04:05:40 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 04:05:40 | ERROR | stderr |   warnings.warn(
+2025-11-21 04:05:40 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 04:05:42 | INFO | stdout | Running on public URL: https://77f860a0a2891c38c0.gradio.live
+2025-11-21 04:05:42 | INFO | stdout | 
+2025-11-21 04:05:42 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 04:09:48 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 04:10:40 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:10:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 04:10:40 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 04:10:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 04:10:40 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 04:10:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 884, in call_function
+2025-11-21 04:10:40 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 04:10:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 04:10:40 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 04:10:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 04:10:40 | ERROR | stderr |     return await future
+2025-11-21 04:10:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 04:10:40 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 04:10:40 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 135, in upload_image
+2025-11-21 04:10:40 | ERROR | stderr |     llm_message = chat.upload_video(image, img_list)
+2025-11-21 04:10:40 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 46, in upload_video
+2025-11-21 04:10:40 | ERROR | stderr |     frames = load_video(video)
+2025-11-21 04:10:40 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 10, in load_video
+2025-11-21 04:10:40 | ERROR | stderr |     vr = VideoReader(video_path, ctx=cpu(0))
+2025-11-21 04:10:40 | ERROR | stderr | UnboundLocalError: local variable 'VideoReader' referenced before assignment
+2025-11-21 04:12:15 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 04:12:15 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:12:15 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1735, in block_thread
+2025-11-21 04:12:15 | ERROR | stderr |     time.sleep(0.1)
+2025-11-21 04:12:15 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:12:15 | ERROR | stderr | 
+2025-11-21 04:12:15 | ERROR | stderr | During handling of the above exception, another exception occurred:
+2025-11-21 04:12:15 | ERROR | stderr | 
+2025-11-21 04:12:15 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:12:15 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 276, in <module>
+2025-11-21 04:12:15 | ERROR | stderr |     demo.launch(share=True, enable_queue=True)
+2025-11-21 04:12:15 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1652, in launch
+2025-11-21 04:12:15 | ERROR | stderr |     self.block_thread()
+2025-11-21 04:12:15 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1738, in block_thread
+2025-11-21 04:12:15 | ERROR | stderr |     self.server.close()
+2025-11-21 04:12:15 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/networking.py", line 43, in close
+2025-11-21 04:12:15 | ERROR | stderr |     self.thread.join()
+2025-11-21 04:12:15 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1096, in join
+2025-11-21 04:12:15 | ERROR | stderr |     self._wait_for_tstate_lock()
+2025-11-21 04:12:15 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+2025-11-21 04:12:15 | ERROR | stderr |     if lock.acquire(block, timeout):
+2025-11-21 04:12:15 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:12:15 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://77f860a0a2891c38c0.gradio.live
+2025-11-21 04:12:39 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:12:39 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:12:39 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 04:12:39 | INFO | stdout | Loading LLM with 4-bit quantization...
+2025-11-21 04:12:39 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:12:39 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:12:40 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 04:13:10 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:30<01:00, 30.45s/it]
+2025-11-21 04:13:38 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:57<00:28, 28.62s/it]
+2025-11-21 04:13:57 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 24.22s/it]
+2025-11-21 04:13:57 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.59s/it]
+2025-11-21 04:13:57 | ERROR | stderr | 
+2025-11-21 04:13:58 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 04:13:59 | INFO | stdout | Injecting vid_patch_token = 32005 into config
+2025-11-21 04:13:59 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 04:14:00 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 04:14:00 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 04:14:00 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 04:14:00 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 04:14:07 | INFO | stdout | Initialization Finished
+2025-11-21 04:14:07 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 04:14:07 | ERROR | stderr |   warnings.warn(
+2025-11-21 04:14:07 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 04:14:09 | INFO | stdout | Running on public URL: https://2982d3f2af366db1f0.gradio.live
+2025-11-21 04:14:09 | INFO | stdout | 
+2025-11-21 04:14:09 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 04:14:30 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 04:15:57 | INFO | gradio_web_server | add_text. ip:. len: 18
+2025-11-21 04:15:59 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/transformers/generation/utils.py:1270: UserWarning: You have modified the pretrained model configuration to control generation. This is a deprecated strategy to control generation and will be removed soon, in a future version. Please use a generation configuration file (see https://huggingface.co/docs/transformers/main_classes/text_generation )
+2025-11-21 04:15:59 | ERROR | stderr |   warnings.warn(
+2025-11-21 04:15:59 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/bitsandbytes/nn/modules.py:224: UserWarning: Input type into Linear4bit is torch.float16, but bnb_4bit_compute_type=torch.float32 (default). This will lead to slow inference or training speed.
+2025-11-21 04:15:59 | ERROR | stderr |   warnings.warn(f'Input type into Linear4bit is torch.float16, but bnb_4bit_compute_type=torch.float32 (default). This will lead to slow inference or training speed.')
+2025-11-21 04:21:10 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 04:21:10 | ERROR | asyncio | Task exception was never retrieved
+future: <Task finished name='50oaa7ts65_10' coro=<Queue.process_events() done, defined at /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py:343> exception=AttributeError("'AsyncRequest' object has no attribute '_json_response_data'")>
+Traceback (most recent call last):
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 370, in process_events
+    while response.json.get("is_generating", False):
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/utils.py", line 759, in json
+    return self._json_response_data
+AttributeError: 'AsyncRequest' object has no attribute '_json_response_data'
+2025-11-21 04:21:10 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:21:10 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1735, in block_thread
+2025-11-21 04:21:10 | ERROR | stderr |     time.sleep(0.1)
+2025-11-21 04:21:10 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:21:10 | ERROR | stderr | 
+2025-11-21 04:21:10 | ERROR | stderr | During handling of the above exception, another exception occurred:
+2025-11-21 04:21:10 | ERROR | stderr | 
+2025-11-21 04:21:10 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:21:10 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 276, in <module>
+2025-11-21 04:21:10 | ERROR | stderr |     demo.launch(share=True, enable_queue=True)
+2025-11-21 04:21:10 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1652, in launch
+2025-11-21 04:21:10 | ERROR | stderr |     self.block_thread()
+2025-11-21 04:21:10 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1738, in block_thread
+2025-11-21 04:21:10 | ERROR | stderr |     self.server.close()
+2025-11-21 04:21:10 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/networking.py", line 43, in close
+2025-11-21 04:21:10 | ERROR | stderr |     self.thread.join()
+2025-11-21 04:21:10 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1096, in join
+2025-11-21 04:21:10 | ERROR | stderr |     self._wait_for_tstate_lock()
+2025-11-21 04:21:10 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+2025-11-21 04:21:10 | ERROR | stderr |     if lock.acquire(block, timeout):
+2025-11-21 04:21:10 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:21:10 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://2982d3f2af366db1f0.gradio.live
+2025-11-21 04:21:56 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:21:56 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:21:56 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 04:21:56 | INFO | stdout | Loading LLM with 4-bit quantization (Speed Optimized)...
+2025-11-21 04:21:56 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:21:56 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:21:57 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 04:22:27 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:29<00:59, 29.98s/it]
+2025-11-21 04:22:55 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:57<00:28, 28.63s/it]
+2025-11-21 04:23:13 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 24.09s/it]
+2025-11-21 04:23:13 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.45s/it]
+2025-11-21 04:23:13 | ERROR | stderr | 
+2025-11-21 04:23:14 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 04:23:15 | INFO | stdout | Injecting vid_patch_token = 32005 into config
+2025-11-21 04:23:15 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 04:23:16 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 04:23:16 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 04:23:16 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 04:23:16 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 04:23:23 | INFO | stdout | Initialization Finished
+2025-11-21 04:23:23 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 04:23:23 | ERROR | stderr |   warnings.warn(
+2025-11-21 04:23:23 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 04:23:25 | INFO | stdout | Running on public URL: https://599717d78e58efe3d1.gradio.live
+2025-11-21 04:23:25 | INFO | stdout | 
+2025-11-21 04:23:25 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 04:23:43 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 04:24:35 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:24:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 04:24:35 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 04:24:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 04:24:35 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 04:24:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 884, in call_function
+2025-11-21 04:24:35 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 04:24:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 04:24:35 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 04:24:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 04:24:35 | ERROR | stderr |     return await future
+2025-11-21 04:24:35 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 04:24:35 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 04:24:35 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 135, in upload_image
+2025-11-21 04:24:35 | ERROR | stderr |     llm_message = chat.upload_video(image, img_list)
+2025-11-21 04:24:35 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 46, in upload_video
+2025-11-21 04:24:35 | ERROR | stderr |     frames = load_video(video)
+2025-11-21 04:24:35 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 11, in load_video
+2025-11-21 04:24:35 | ERROR | stderr |     vr = VideoReader(video_path, ctx=cpu(0))
+2025-11-21 04:24:35 | ERROR | stderr | UnboundLocalError: local variable 'VideoReader' referenced before assignment
+2025-11-21 04:25:40 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 04:25:40 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:25:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1735, in block_thread
+2025-11-21 04:25:40 | ERROR | stderr |     time.sleep(0.1)
+2025-11-21 04:25:40 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:25:40 | ERROR | stderr | 
+2025-11-21 04:25:40 | ERROR | stderr | During handling of the above exception, another exception occurred:
+2025-11-21 04:25:40 | ERROR | stderr | 
+2025-11-21 04:25:40 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:25:40 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 276, in <module>
+2025-11-21 04:25:40 | ERROR | stderr |     demo.launch(share=True, enable_queue=True)
+2025-11-21 04:25:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1652, in launch
+2025-11-21 04:25:40 | ERROR | stderr |     self.block_thread()
+2025-11-21 04:25:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1738, in block_thread
+2025-11-21 04:25:40 | ERROR | stderr |     self.server.close()
+2025-11-21 04:25:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/networking.py", line 43, in close
+2025-11-21 04:25:40 | ERROR | stderr |     self.thread.join()
+2025-11-21 04:25:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1096, in join
+2025-11-21 04:25:40 | ERROR | stderr |     self._wait_for_tstate_lock()
+2025-11-21 04:25:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+2025-11-21 04:25:40 | ERROR | stderr |     if lock.acquire(block, timeout):
+2025-11-21 04:25:40 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:25:40 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://599717d78e58efe3d1.gradio.live
+2025-11-21 04:26:12 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:26:12 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:26:12 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 04:26:12 | INFO | stdout | Loading LLM with 4-bit quantization (Speed Optimized)...
+2025-11-21 04:26:12 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:26:12 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:26:13 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 04:26:42 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:29<00:58, 29.47s/it]
+2025-11-21 04:27:09 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:56<00:28, 28.12s/it]
+2025-11-21 04:27:28 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:15<00:00, 23.79s/it]
+2025-11-21 04:27:28 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:15<00:00, 25.09s/it]
+2025-11-21 04:27:28 | ERROR | stderr | 
+2025-11-21 04:27:29 | INFO | stdout | Resizing token embeddings to 32006...
+2025-11-21 04:27:30 | INFO | stdout | Injecting vid_patch_token = 32005 into config
+2025-11-21 04:27:30 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 04:27:32 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 04:27:32 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 04:27:32 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 04:27:32 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 04:27:38 | INFO | stdout | Initialization Finished
+2025-11-21 04:27:39 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 04:27:39 | ERROR | stderr |   warnings.warn(
+2025-11-21 04:27:39 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 04:27:40 | INFO | stdout | Running on public URL: https://883c640ab708f2cfd6.gradio.live
+2025-11-21 04:27:40 | INFO | stdout | 
+2025-11-21 04:27:40 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 04:32:25 | ERROR | asyncio | Task exception was never retrieved
+future: <Task finished name='n4kh6e66qyp_6' coro=<Queue.process_events() done, defined at /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py:343> exception=WebSocketDisconnect(<CloseCode.ABNORMAL_CLOSURE: 1006>, '')>
+Traceback (most recent call last):
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 347, in process_events
+    client_awake = await self.gather_event_data(event)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 220, in gather_event_data
+    data, client_awake = await self.get_message(event, timeout=receive_timeout)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 453, in get_message
+    data = await asyncio.wait_for(
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/asyncio/tasks.py", line 445, in wait_for
+    return fut.result()
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 136, in receive_json
+    self._raise_on_disconnect(message)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 114, in _raise_on_disconnect
+    raise WebSocketDisconnect(message["code"], message.get("reason"))
+starlette.websockets.WebSocketDisconnect: (<CloseCode.ABNORMAL_CLOSURE: 1006>, '')
+2025-11-21 04:32:50 | ERROR | asyncio | Task exception was never retrieved
+future: <Task finished name='n4kh6e66qyp_9' coro=<Queue.process_events() done, defined at /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py:343> exception=WebSocketDisconnect(<CloseCode.ABNORMAL_CLOSURE: 1006>, '')>
+Traceback (most recent call last):
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 347, in process_events
+    client_awake = await self.gather_event_data(event)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 220, in gather_event_data
+    data, client_awake = await self.get_message(event, timeout=receive_timeout)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 453, in get_message
+    data = await asyncio.wait_for(
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/asyncio/tasks.py", line 445, in wait_for
+    return fut.result()
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 136, in receive_json
+    self._raise_on_disconnect(message)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 114, in _raise_on_disconnect
+    raise WebSocketDisconnect(message["code"], message.get("reason"))
+starlette.websockets.WebSocketDisconnect: (<CloseCode.ABNORMAL_CLOSURE: 1006>, '')
+2025-11-21 04:32:50 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 04:34:12 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 04:41:31 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 04:41:31 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:41:31 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1735, in block_thread
+2025-11-21 04:41:31 | ERROR | stderr |     time.sleep(0.1)
+2025-11-21 04:41:31 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:41:31 | ERROR | stderr | 
+2025-11-21 04:41:31 | ERROR | stderr | During handling of the above exception, another exception occurred:
+2025-11-21 04:41:31 | ERROR | stderr | 
+2025-11-21 04:41:31 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:41:31 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 276, in <module>
+2025-11-21 04:41:31 | ERROR | stderr |     demo.launch(share=True, enable_queue=True)
+2025-11-21 04:41:31 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1652, in launch
+2025-11-21 04:41:31 | ERROR | stderr |     self.block_thread()
+2025-11-21 04:41:31 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1738, in block_thread
+2025-11-21 04:41:31 | ERROR | stderr |     self.server.close()
+2025-11-21 04:41:31 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/networking.py", line 43, in close
+2025-11-21 04:41:31 | ERROR | stderr |     self.thread.join()
+2025-11-21 04:41:31 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1096, in join
+2025-11-21 04:41:31 | ERROR | stderr |     self._wait_for_tstate_lock()
+2025-11-21 04:41:31 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+2025-11-21 04:41:31 | ERROR | stderr |     if lock.acquire(block, timeout):
+2025-11-21 04:41:31 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:41:31 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://883c640ab708f2cfd6.gradio.live
+2025-11-21 04:42:06 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:42:06 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:42:06 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 04:42:06 | INFO | stdout | Loading LLM with 4-bit quantization (Speed Optimized)...
+2025-11-21 04:42:06 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:42:06 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:42:06 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 04:42:37 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:30<01:01, 30.78s/it]
+2025-11-21 04:43:05 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:58<00:28, 28.94s/it]
+2025-11-21 04:43:24 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:17<00:00, 24.50s/it]
+2025-11-21 04:43:24 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:17<00:00, 25.88s/it]
+2025-11-21 04:43:24 | ERROR | stderr | 
+2025-11-21 04:43:25 | INFO | stdout | Resizing token embeddings to 32005...
+2025-11-21 04:43:26 | INFO | stdout | Injecting vid_patch_token = 32001 into config
+2025-11-21 04:43:26 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 04:43:27 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 04:43:28 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 04:43:28 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 04:43:28 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 04:43:35 | INFO | stdout | Initialization Finished
+2025-11-21 04:43:35 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 04:43:35 | ERROR | stderr |   warnings.warn(
+2025-11-21 04:43:36 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 04:43:37 | INFO | stdout | Running on public URL: https://8c0e7dbb0d670fe371.gradio.live
+2025-11-21 04:43:37 | INFO | stdout | 
+2025-11-21 04:43:37 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 04:43:50 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 04:44:37 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:44:37 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/routes.py", line 394, in run_predict
+2025-11-21 04:44:37 | ERROR | stderr |     output = await app.get_blocks().process_api(
+2025-11-21 04:44:37 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1075, in process_api
+2025-11-21 04:44:37 | ERROR | stderr |     result = await self.call_function(
+2025-11-21 04:44:37 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 884, in call_function
+2025-11-21 04:44:37 | ERROR | stderr |     prediction = await anyio.to_thread.run_sync(
+2025-11-21 04:44:37 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
+2025-11-21 04:44:37 | ERROR | stderr |     return await get_async_backend().run_sync_in_worker_thread(
+2025-11-21 04:44:37 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+2025-11-21 04:44:37 | ERROR | stderr |     return await future
+2025-11-21 04:44:37 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+2025-11-21 04:44:37 | ERROR | stderr |     result = context.run(func, *args)
+2025-11-21 04:44:37 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 135, in upload_image
+2025-11-21 04:44:37 | ERROR | stderr |     llm_message = chat.upload_video(image, img_list)
+2025-11-21 04:44:37 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/chat.py", line 46, in upload_video
+2025-11-21 04:44:37 | ERROR | stderr |     frames = load_video(video)
+2025-11-21 04:44:37 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/eval/model_utils.py", line 9, in load_video
+2025-11-21 04:44:37 | ERROR | stderr |     vr = VideoReader(video_path, ctx=cpu(0))
+2025-11-21 04:44:37 | ERROR | stderr | UnboundLocalError: local variable 'VideoReader' referenced before assignment
+2025-11-21 04:45:50 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 04:45:50 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://8c0e7dbb0d670fe371.gradio.live
+2025-11-21 04:47:01 | INFO | gradio_web_server | args: Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:47:01 | INFO | gradio_web_server | Namespace(host='0.0.0.0', port=None, controller_url='http://localhost:21001', concurrency_count=8, model_list_mode='once', share=False, moderate=False, embed=False, model_name='./checkpoints/Llama-2-7b-chat-hf', vision_tower_name='openai/clip-vit-large-patch14', conv_mode='video-chatgpt_v1', projection_path='./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin')
+2025-11-21 04:47:01 | INFO | stdout | Loading model: ./checkpoints/Llama-2-7b-chat-hf...
+2025-11-21 04:47:01 | INFO | stdout | Loading LLM with 4-bit quantization (Speed Optimized)...
+2025-11-21 04:47:01 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:47:01 | WARNING | transformers.configuration_utils | You are using a model of type video_chatgpt_llama to instantiate a model of type VideoChatGPT. This is not supported for all configurations of models and can yield errors.
+2025-11-21 04:47:02 | ERROR | stderr | Loading checkpoint shards:   0%|                                                                                                                                                              | 0/3 [00:00<?, ?it/s]
+2025-11-21 04:47:32 | ERROR | stderr | Loading checkpoint shards:  33%|██████████████████████████████████████████████████                                                                                                    | 1/3 [00:30<01:00, 30.46s/it]
+2025-11-21 04:48:00 | ERROR | stderr | Loading checkpoint shards:  67%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 2/3 [00:57<00:28, 28.68s/it]
+2025-11-21 04:48:18 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 24.06s/it]
+2025-11-21 04:48:18 | ERROR | stderr | Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:16<00:00, 25.49s/it]
+2025-11-21 04:48:18 | ERROR | stderr | 
+2025-11-21 04:48:19 | INFO | stdout | Resizing token embeddings to 32005...
+2025-11-21 04:48:20 | INFO | stdout | Injecting vid_patch_token = 32001 into config
+2025-11-21 04:48:20 | INFO | stdout | Loading weights from ./checkpoints/Video-ChatGPT-7B-Adapter/video_chatgpt-7B.bin
+2025-11-21 04:48:21 | INFO | stdout | ✅ Found projector weight, injecting...
+2025-11-21 04:48:21 | INFO | stdout | ✅ Found projector bias, injecting...
+2025-11-21 04:48:21 | INFO | stdout | 🎉 Adapter weights injected manually!
+2025-11-21 04:48:21 | INFO | stdout | Loading Vision Tower: openai/clip-vit-large-patch14
+2025-11-21 04:48:28 | INFO | stdout | Initialization Finished
+2025-11-21 04:48:28 | ERROR | stderr | /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/deprecation.py:43: UserWarning: You have unused kwarg parameters in Markdown, please remove them: {'style': 'color:gray'}
+2025-11-21 04:48:28 | ERROR | stderr |   warnings.warn(
+2025-11-21 04:48:29 | INFO | stdout | Running on local URL:  http://127.0.0.1:7860
+2025-11-21 04:48:30 | INFO | stdout | Running on public URL: https://9759469cd2b82eeb40.gradio.live
+2025-11-21 04:48:30 | INFO | stdout | 
+2025-11-21 04:48:30 | INFO | stdout | This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+2025-11-21 04:48:44 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 04:52:13 | ERROR | asyncio | Task exception was never retrieved
+future: <Task finished name='61yz19ez2pf_6' coro=<Queue.process_events() done, defined at /home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py:343> exception=WebSocketDisconnect(<CloseCode.ABNORMAL_CLOSURE: 1006>, '')>
+Traceback (most recent call last):
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 347, in process_events
+    client_awake = await self.gather_event_data(event)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 220, in gather_event_data
+    data, client_awake = await self.get_message(event, timeout=receive_timeout)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/queueing.py", line 453, in get_message
+    data = await asyncio.wait_for(
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/asyncio/tasks.py", line 445, in wait_for
+    return fut.result()
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 136, in receive_json
+    self._raise_on_disconnect(message)
+  File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/starlette/websockets.py", line 114, in _raise_on_disconnect
+    raise WebSocketDisconnect(message["code"], message.get("reason"))
+starlette.websockets.WebSocketDisconnect: (<CloseCode.ABNORMAL_CLOSURE: 1006>, '')
+2025-11-21 04:52:14 | INFO | gradio_web_server | load_demo.. params: {}
+2025-11-21 04:56:40 | INFO | stdout | Keyboard interruption in main thread... closing server.
+2025-11-21 04:56:40 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:56:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1735, in block_thread
+2025-11-21 04:56:40 | ERROR | stderr |     time.sleep(0.1)
+2025-11-21 04:56:40 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:56:40 | ERROR | stderr | 
+2025-11-21 04:56:40 | ERROR | stderr | During handling of the above exception, another exception occurred:
+2025-11-21 04:56:40 | ERROR | stderr | 
+2025-11-21 04:56:40 | ERROR | stderr | Traceback (most recent call last):
+2025-11-21 04:56:40 | ERROR | stderr |   File "/root/Video-ChatGPT/video_chatgpt/demo/video_demo.py", line 276, in <module>
+2025-11-21 04:56:40 | ERROR | stderr |     demo.launch(share=True, enable_queue=True)
+2025-11-21 04:56:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1652, in launch
+2025-11-21 04:56:40 | ERROR | stderr |     self.block_thread()
+2025-11-21 04:56:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/blocks.py", line 1738, in block_thread
+2025-11-21 04:56:40 | ERROR | stderr |     self.server.close()
+2025-11-21 04:56:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/site-packages/gradio/networking.py", line 43, in close
+2025-11-21 04:56:40 | ERROR | stderr |     self.thread.join()
+2025-11-21 04:56:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1096, in join
+2025-11-21 04:56:40 | ERROR | stderr |     self._wait_for_tstate_lock()
+2025-11-21 04:56:40 | ERROR | stderr |   File "/home/vipuser/anaconda3/envs/video_chatgpt/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+2025-11-21 04:56:40 | ERROR | stderr |     if lock.acquire(block, timeout):
+2025-11-21 04:56:40 | ERROR | stderr | KeyboardInterrupt
+2025-11-21 04:56:40 | INFO | stdout | Killing tunnel 127.0.0.1:7860 <> https://9759469cd2b82eeb40.gradio.live

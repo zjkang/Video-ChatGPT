@@ -59,7 +59,7 @@ class VideoChatGPTLlamaModel(LlamaModel):
 
     def forward(
             self,
-            input_ids: torch.LongTensor = None,
+            input_ids: torch.LongTensor = None, images=None,
             attention_mask: Optional[torch.Tensor] = None,
             past_key_values: Optional[List[torch.FloatTensor]] = None,
             inputs_embeds: Optional[torch.FloatTensor] = None,
@@ -88,7 +88,13 @@ class VideoChatGPTLlamaModel(LlamaModel):
             new_input_embeds = []
             cur_video_idx = 0
             for cur_input_ids, cur_input_embeds in zip(input_ids, inputs_embeds):
-                if (cur_input_ids == self.vision_config.vid_patch_token).sum() == 0:
+                # [Fix] Ensure cur_input_ids is a Tensor
+                if not isinstance(cur_input_ids, torch.Tensor):
+                    cur_input_ids = torch.tensor(cur_input_ids, device=self.device)
+                # [Fix] Force convert list to tensor to avoid AttributeError
+                if not isinstance(cur_input_ids, torch.Tensor):
+                    cur_input_ids = torch.tensor(cur_input_ids, device=self.device)
+                if (torch.as_tensor(cur_input_ids, device=self.device) == self.vision_config.vid_patch_token).sum() == 0:
                     # Multimodal LLM, but the current sample is not multimodal
                     cur_input_embeds = cur_input_embeds + (0. * dummy_video_features).sum()
                     new_input_embeds.append(cur_input_embeds)
@@ -125,7 +131,10 @@ class VideoChatGPTLlamaModel(LlamaModel):
                 else:
                     cur_video_features = video_features[cur_video_idx]
                     num_patches = cur_video_features.shape[0]
-                    if (cur_input_ids == self.vision_config.vid_patch_token).sum() != num_patches:
+                    # [Fix] Ensure cur_input_ids is a Tensor
+                    if not isinstance(cur_input_ids, torch.Tensor):
+                        cur_input_ids = torch.tensor(cur_input_ids, device=self.device)
+                    if (torch.as_tensor(cur_input_ids, device=self.device) == self.vision_config.vid_patch_token).sum() != num_patches:
                         raise ValueError(
                             "The number of video patch tokens should be the same as the number of video patches.")
                     masked_indices = torch.where(cur_input_ids == self.vision_config.vid_patch_token)[0]
@@ -170,7 +179,7 @@ class VideoChatGPTLlamaForCausalLM(LlamaForCausalLM):
 
     def forward(
             self,
-            input_ids: torch.LongTensor = None,
+            input_ids: torch.LongTensor = None, images=None,
             attention_mask: Optional[torch.Tensor] = None,
             past_key_values: Optional[List[torch.FloatTensor]] = None,
             inputs_embeds: Optional[torch.FloatTensor] = None,
