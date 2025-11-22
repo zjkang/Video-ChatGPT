@@ -192,11 +192,17 @@ def train():
             pretrain_mm_mlp_adapter=None  # 如果需要预训练权重，可以指定路径
         )
         
-        # 将 mm_projector 转换为 float16（与量化模型兼容）
-        model.get_model().mm_projector = model.get_model().mm_projector.to(torch.float16)
+        # 找到模型参数所在的设备（用于 device_map="auto"）
+        # 获取第一个模型参数的设备位置
+        model_device = next(model.get_model().embed_tokens.parameters()).device
+        print(f"📱 Model device: {model_device}")
+        
+        # 将 mm_projector 移动到正确的设备和 dtype
+        model.get_model().mm_projector = model.get_model().mm_projector.to(model_device).to(torch.float16)
         
         print(f"✅ Vision modules initialized:")
         print(f"   - mm_projector: {model_vision_dict['vision_config'].hidden_size} -> {model.config.hidden_size}")
+        print(f"   - mm_projector device: {model.get_model().mm_projector.weight.device}")
         print(f"   - video_token_len: {model_vision_dict['video_token_len']}")
     else:
         print("✅ mm_projector already exists")
@@ -211,6 +217,28 @@ def train():
     )
     
     model = get_peft_model(model, config)
+    
+    # 确保 PEFT 包装后，mm_projector 仍然在正确的设备上
+    # 检查 mm_projector 是否被正确包装，如果设备不对则修复
+    if hasattr(model.get_model(), 'mm_projector'):
+        try:
+            # 验证设备 - 获取 mm_projector 的设备
+            projector_params = list(model.get_model().mm_projector.parameters())
+            if len(projector_params) > 0:
+                projector_device = projector_params[0].device
+                # 获取模型其他部分的设备作为参考
+                model_device = next(model.get_model().embed_tokens.parameters()).device
+                
+                if projector_device != model_device:
+                    print(f"⚠️ Warning: mm_projector device ({projector_device}) != model device ({model_device})")
+                    print(f"   正在移动 mm_projector 到 {model_device}...")
+                    # 将 mm_projector 移动到正确的设备和 dtype
+                    model.get_model().mm_projector = model.get_model().mm_projector.to(model_device).to(torch.float16)
+                    print(f"✅ mm_projector 已移动到 {model_device} (dtype: float16)")
+                else:
+                    print(f"✅ PEFT 包装后，mm_projector device: {projector_device} (正确)")
+        except Exception as e:
+            print(f"⚠️ Warning: 无法检查 mm_projector 设备: {e}")
     
     model.resize_token_embeddings(len(tokenizer))
     
