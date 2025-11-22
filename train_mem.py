@@ -38,6 +38,7 @@ class TrainingArguments(transformers.TrainingArguments):
     gradient_accumulation_steps: int = field(default=4)
     learning_rate: float = field(default=2e-4)
     save_strategy: str = field(default="no") # Dry Run 不保存
+    remove_unused_columns: bool = field(default=False) # 防止 Trainer 移除 'video' 等中间键
 
 # --- 2. 数据集加载器 (MiniVideoDataset) ---
 class MiniVideoDataset(Dataset):
@@ -85,14 +86,17 @@ class MiniVideoDataset(Dataset):
         input_ids = tokenized.input_ids[0]
         labels = input_ids.clone()
         
-        # 3. 返回数据 (修复 KeyError: 'video_spatio_temporal_features' 和 NumPy 转换问题)
-        return dict(
+        # 3. 返回数据 - 使用 'video' 键作为中间键名（与原始训练代码保持一致）
+        data_dict = dict(
             input_ids=input_ids,
             attention_mask=tokenized.attention_mask[0],
             labels=labels,
-            # 关键修复: 将 NumPy 转换为 PyTorch Tensor 并使用 'video_spatio_temporal_features' 键
-            video_spatio_temporal_features=torch.from_numpy(video_features).to(dtype=torch.float16) 
         )
+        
+        # 添加视频特征，使用 'video' 键（中间键名，DataCollator 会转换为模型需要的键名）
+        data_dict['video'] = torch.from_numpy(video_features).to(dtype=torch.float16)
+        
+        return data_dict
 
 # --- 3. 数据整理器 (Data Collator) ---
 @dataclass
@@ -103,17 +107,25 @@ class DataCollatorForVideo:
         labels = torch.stack([instance['labels'] for instance in instances])
         attention_mask = torch.stack([instance['attention_mask'] for instance in instances])
         
-        # 堆叠视频特征
-        images = [instance['video_spatio_temporal_features'] for instance in instances]
-        if isinstance(images[0], torch.Tensor):
-            images = torch.stack(images) 
-
-        return dict(
+        # 构建基础 batch
+        batch = dict(
             input_ids=input_ids,
             labels=labels,
             attention_mask=attention_mask,
-            video_spatio_temporal_features=images
         )
+        
+        # 处理视频特征：从 Dataset 的 'video' 键读取，转换为模型需要的 'video_spatio_temporal_features' 键
+        if len(instances) > 0 and 'video' in instances[0]:
+            features = [instance['video'] for instance in instances]
+            # 确保所有特征都是 torch.Tensor
+            features = [f if isinstance(f, torch.Tensor) else torch.tensor(f) for f in features]
+            # 如果所有特征的形状相同，则堆叠；否则保持列表
+            if all(x is not None and x.shape == features[0].shape for x in features):
+                batch['video_spatio_temporal_features'] = torch.stack(features)
+            else:
+                batch['video_spatio_temporal_features'] = features
+        
+        return batch
 
 def train():
     parser = transformers.HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
