@@ -85,13 +85,13 @@ class MiniVideoDataset(Dataset):
         input_ids = tokenized.input_ids[0]
         labels = input_ids.clone()
         
-        # 3. 返回数据 (修复 KeyError: 'images' 和 NumPy 转换问题)
+        # 3. 返回数据 (修复 KeyError: 'video_spatio_temporal_features' 和 NumPy 转换问题)
         return dict(
             input_ids=input_ids,
             attention_mask=tokenized.attention_mask[0],
             labels=labels,
-            # 关键修复: 将 NumPy 转换为 PyTorch Tensor 并使用 'images' 键
-            images=torch.from_numpy(video_features).to(dtype=torch.float16) 
+            # 关键修复: 将 NumPy 转换为 PyTorch Tensor 并使用 'video_spatio_temporal_features' 键
+            video_spatio_temporal_features=torch.from_numpy(video_features).to(dtype=torch.float16) 
         )
 
 # --- 3. 数据整理器 (Data Collator) ---
@@ -104,7 +104,7 @@ class DataCollatorForVideo:
         attention_mask = torch.stack([instance['attention_mask'] for instance in instances])
         
         # 堆叠视频特征
-        images = [instance['images'] for instance in instances]
+        images = [instance['video_spatio_temporal_features'] for instance in instances]
         if isinstance(images[0], torch.Tensor):
             images = torch.stack(images) 
 
@@ -112,7 +112,7 @@ class DataCollatorForVideo:
             input_ids=input_ids,
             labels=labels,
             attention_mask=attention_mask,
-            images=images
+            video_spatio_temporal_features=images
         )
 
 def train():
