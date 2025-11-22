@@ -38,6 +38,7 @@ class TrainingArguments(transformers.TrainingArguments):
     gradient_accumulation_steps: int = field(default=4)
     learning_rate: float = field(default=2e-4)
     save_strategy: str = field(default="no") # Dry Run 不保存
+    output_dir: str = field(default="./outputs/baseline") # 输出目录
     remove_unused_columns: bool = field(default=False) # 防止 Trainer 移除 'video' 等中间键
 
 # --- 2. 数据集加载器 (MiniVideoDataset) ---
@@ -66,12 +67,15 @@ class MiniVideoDataset(Dataset):
             except:
                 print(f"Warning: Failed to load feature for {video_id}. Using zeros.")
 
-        # 2. 处理对话文本 (修复 KeyError: 'conversations')
+        # 2. 处理对话文本
         q = item['q']
         a = item['a']
         
-        # 构造 Prompt (修复 SyntaxError)
-        prompt = f"Human: <video> {q}\nAssistant: {a}</s>"
+        # 构造 Prompt - 添加 100 个 <vid_patch> tokens 来插入视频特征
+        # 格式: "Human: <video> <vid_patch> x 100 {q}\nAssistant: {a}</s>"
+        num_video_tokens = 100  # 对应 100 帧视频
+        video_tokens = "<vid_patch>" * num_video_tokens
+        prompt = f"Human: <video> {video_tokens} {q}\nAssistant: {a}</s>"
         
         # Tokenize
         tokenized = self.tokenizer(
@@ -85,6 +89,21 @@ class MiniVideoDataset(Dataset):
         
         input_ids = tokenized.input_ids[0]
         labels = input_ids.clone()
+        
+        # Mask labels: 只在 Assistant 回答部分计算 loss
+        # 找到 "Assistant:" 之后第一个空格的位置，之前的部分设为 -100（ignore）
+        # 更可靠的方法：分别 tokenize prompt 的前后部分
+        prompt_before_answer = f"Human: <video> {video_tokens} {q}\nAssistant:"
+        prompt_answer = a + "</s>"
+        
+        # Tokenize 分别找位置
+        before_ids = self.tokenizer.encode(prompt_before_answer, add_special_tokens=False)
+        # 找到 Assistant: 之后的开始位置
+        labels[:len(before_ids)] = -100  # Mask 掉 Assistant 之前的所有内容
+        
+        # 保留 padding tokens 也 mask 掉
+        pad_token_id = self.tokenizer.pad_token_id if self.tokenizer.pad_token_id is not None else 0
+        labels[input_ids == pad_token_id] = -100
         
         # 3. 返回数据 - 使用 'video' 键作为中间键名（与原始训练代码保持一致）
         data_dict = dict(
@@ -152,6 +171,35 @@ def train():
     )
     
     model = prepare_model_for_kbit_training(model)
+    
+    # 初始化视觉模块（使用官方方法，更完整）
+    print("📦 Initializing vision modules...")
+    
+    # 首先确保 vision_config 存在（initialize_vision_modules 需要它）
+    if not hasattr(model.get_model(), "vision_config"):
+        from video_chatgpt.model.video_chatgpt import VisionConfig
+        model.get_model().vision_config = VisionConfig()
+        print("✅ vision_config created")
+    
+    # 使用官方方法初始化 mm_projector（这会设置所有必要的配置）
+    # 这个方法会：
+    # 1. 设置 config.use_mm_proj = True
+    # 2. 设置 config.mm_hidden_size = vision_config.hidden_size (1024)
+    # 3. 创建 mm_projector (1024 -> 4096)
+    # 4. 计算 video_token_len
+    if not hasattr(model.get_model(), "mm_projector"):
+        model_vision_dict = model.get_model().initialize_vision_modules(
+            pretrain_mm_mlp_adapter=None  # 如果需要预训练权重，可以指定路径
+        )
+        
+        # 将 mm_projector 转换为 float16（与量化模型兼容）
+        model.get_model().mm_projector = model.get_model().mm_projector.to(torch.float16)
+        
+        print(f"✅ Vision modules initialized:")
+        print(f"   - mm_projector: {model_vision_dict['vision_config'].hidden_size} -> {model.config.hidden_size}")
+        print(f"   - video_token_len: {model_vision_dict['video_token_len']}")
+    else:
+        print("✅ mm_projector already exists")
 
     config = LoraConfig(
         r=8,
@@ -190,8 +238,14 @@ def train():
     print("🔥 Starting Training (Dry Run)...")
     trainer.train()
     
-    print("✅ Training Finished! Saving Adapter...")
-    model.save_pretrained(training_args.output_dir)
+    # 保存模型（如果设置了输出目录）
+    if hasattr(training_args, 'output_dir') and training_args.output_dir:
+        print("✅ Training Finished! Saving Adapter...")
+        os.makedirs(training_args.output_dir, exist_ok=True)
+        model.save_pretrained(training_args.output_dir)
+        print(f"✅ Model saved to {training_args.output_dir}")
+    else:
+        print("✅ Training Finished! (No output directory specified, skipping save)")
 
 if __name__ == "__main__":
     train()
