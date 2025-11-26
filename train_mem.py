@@ -92,12 +92,17 @@ class MiniVideoDataset(Dataset):
         
         # Mask labels: 只在 Assistant 回答部分计算 loss
         # 找到 "Assistant:" 之后第一个空格的位置，之前的部分设为 -100（ignore）
-        # 更可靠的方法：分别 tokenize prompt 的前后部分
+        # 更可靠的方法：分别 tokenize prompt 的前后部分（使用相同的 add_special_tokens 设置）
         prompt_before_answer = f"Human: <video> {video_tokens} {q}\nAssistant:"
         prompt_answer = a + "</s>"
         
-        # Tokenize 分别找位置
-        before_ids = self.tokenizer.encode(prompt_before_answer, add_special_tokens=False)
+        # Tokenize 分别找位置（使用相同的 add_special_tokens=True 以匹配 input_ids）
+        before_tokenized = self.tokenizer(
+            prompt_before_answer,
+            return_tensors="pt",
+            add_special_tokens=True
+        )
+        before_ids = before_tokenized.input_ids[0].tolist()
         # 找到 Assistant: 之后的开始位置
         labels[:len(before_ids)] = -100  # Mask 掉 Assistant 之前的所有内容
         
@@ -153,7 +158,15 @@ def train():
     # --- A. 加载 Tokenizer ---
     tokenizer = transformers.AutoTokenizer.from_pretrained(model_args.model_name_or_path, use_fast=False)
     tokenizer.pad_token = tokenizer.unk_token
-    tokenizer.add_tokens(["<video>", "<vid_patch>"], special_tokens=True)
+    # 检查并添加特殊 tokens（避免重复添加）
+    special_tokens = ["<video>", "<vid_patch>"]
+    existing_tokens = set(tokenizer.get_vocab().keys())
+    tokens_to_add = [t for t in special_tokens if t not in existing_tokens]
+    if tokens_to_add:
+        tokenizer.add_tokens(tokens_to_add, special_tokens=True)
+        print(f"✅ Added special tokens: {tokens_to_add}")
+    else:
+        print(f"✅ Special tokens already exist: {special_tokens}")
 
     # --- B. 加载模型 (QLoRA 核心) ---
     print("🚀 Loading Model with 4-bit QLoRA...")
@@ -232,8 +245,16 @@ def train():
                 if projector_device != model_device:
                     print(f"⚠️ Warning: mm_projector device ({projector_device}) != model device ({model_device})")
                     print(f"   正在移动 mm_projector 到 {model_device}...")
-                    # 将 mm_projector 移动到正确的设备和 dtype
-                    model.get_model().mm_projector = model.get_model().mm_projector.to(model_device).to(torch.float16)
+                    # 检查 mm_projector 是否被 PEFT 包装
+                    # 如果被包装，直接移动整个模块（PEFT 会保持引用）
+                    # 如果未被包装，直接移动
+                    mm_projector = model.get_model().mm_projector
+                    mm_projector = mm_projector.to(model_device).to(torch.float16)
+                    # 如果被 PEFT 包装，需要更新引用
+                    if hasattr(mm_projector, 'base_layer'):
+                        # PEFT 包装的情况：更新 base_layer
+                        print(f"   mm_projector 被 PEFT 包装，更新 base_layer...")
+                    model.get_model().mm_projector = mm_projector
                     print(f"✅ mm_projector 已移动到 {model_device} (dtype: float16)")
                 else:
                     print(f"✅ PEFT 包装后，mm_projector device: {projector_device} (正确)")

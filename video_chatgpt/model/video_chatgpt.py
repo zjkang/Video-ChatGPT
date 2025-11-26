@@ -79,15 +79,27 @@ class VideoChatGPTLlamaModel(LlamaModel):
             inputs_embeds = self.embed_tokens(input_ids)
 
         if (input_ids.shape[1] != 1 or self.training) and video_spatio_temporal_features is not None:
-            # 确保 video_spatio_temporal_features 在正确的设备上
+            # 确保 video_spatio_temporal_features 在正确的设备和 dtype 上
             model_device = inputs_embeds.device
+            # 获取 mm_projector 权重的 dtype（应该是 float16）
+            projector_dtype = next(self.mm_projector.parameters()).dtype
+            
             if video_spatio_temporal_features.device != model_device:
                 video_spatio_temporal_features = video_spatio_temporal_features.to(model_device)
+            # 确保 dtype 与 mm_projector 匹配
+            if video_spatio_temporal_features.dtype != projector_dtype:
+                video_spatio_temporal_features = video_spatio_temporal_features.to(projector_dtype)
 
             video_features = self.mm_projector(video_spatio_temporal_features)
-            dummy_video_features = torch.zeros(video_features.shape[1], 1024, device=inputs_embeds.device,
-                                               dtype=inputs_embeds.dtype)
-            dummy_video_features = self.mm_projector(dummy_video_features)
+            # 【关键修复】确保 mm_projector 输出是 FP16，以匹配后续的 LoRA 层
+            # 即使 mm_projector 权重是 FP16，输出可能仍然是 FP32（PyTorch 自动类型提升）
+            video_features = video_features.to(projector_dtype)
+            
+            # 使用 mm_projector 的 dtype 创建 dummy_video_features
+            dummy_video_features = torch.zeros(video_features.shape[1], 1024, 
+                                               device=model_device,
+                                               dtype=projector_dtype)
+            dummy_video_features = self.mm_projector(dummy_video_features).to(projector_dtype)
 
             new_input_embeds = []
             cur_video_idx = 0
@@ -133,7 +145,7 @@ class VideoChatGPTLlamaModel(LlamaModel):
                         cur_video_idx += 1
                     new_input_embeds.append(cur_new_input_embeds)
                 else:
-                    cur_video_features = video_features[cur_video_idx]
+                    cur_video_features = video_features[cur_video_idx].to(device=cur_input_embeds.device)
                     num_patches = cur_video_features.shape[0]
                     # [Fix] Ensure cur_input_ids is a Tensor
                     if not isinstance(cur_input_ids, torch.Tensor):
@@ -157,6 +169,10 @@ class VideoChatGPTLlamaModel(LlamaModel):
                     new_input_embeds.append(cur_new_input_embeds)
                     cur_video_idx += 1
             inputs_embeds = torch.stack(new_input_embeds, dim=0)
+            # 【关键修复】确保 inputs_embeds 是 FP16，以匹配后续的 LoRA 层
+            # 即使 video_features 是 FP16，拼接后的 inputs_embeds 可能被提升为 FP32
+            if inputs_embeds.dtype != projector_dtype:
+                inputs_embeds = inputs_embeds.to(projector_dtype)
 
         return super(VideoChatGPTLlamaModel, self).forward(
             input_ids=None, attention_mask=attention_mask, past_key_values=past_key_values,
