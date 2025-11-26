@@ -66,8 +66,12 @@ def initialize_model(model_name, projection_path=None):
         state_dict = torch.load(projection_path, map_location='cpu')
         
         if not hasattr(model.get_model(), 'mm_projector'):
-            from torch import nn
-            model.get_model().mm_projector = nn.Linear(1024, 4096).to(model.device)
+            from video_chatgpt.model.temporal_transformer import TemporalTransformer
+            model.get_model().mm_projector = TemporalTransformer(
+                input_dim=1024,
+                output_dim=4096,
+                num_layers=2
+            ).to(model.device)
 
         for k, v in state_dict.items():
             if 'mm_projector' in k:
