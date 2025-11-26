@@ -12,8 +12,7 @@ from transformers import Trainer, TrainingArguments, BitsAndBytesConfig
 from peft import (
     LoraConfig,
     get_peft_model,
-    prepare_model_for_kbit_training,
-    TaskType
+    prepare_model_for_kbit_training
 )
 from video_chatgpt.model import VideoChatGPTLlamaForCausalLM
 
