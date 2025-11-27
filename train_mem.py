@@ -235,13 +235,24 @@ def train():
     config = LoraConfig(
         r=8,
         lora_alpha=16,
-        target_modules=["q_proj", "v_proj", "mm_projector"], 
+        target_modules=["q_proj", "v_proj"],  # 移除 mm_projector，因为 TemporalTransformer 不支持 LoRA
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM"
     )
     
     model = get_peft_model(model, config)
+    
+    # 设置 mm_projector (TemporalTransformer) 为可训练（不使用 LoRA，直接全参数训练）
+    # 因为 TemporalTransformer 是轻量级模块，参数量不大，可以直接全参数训练
+    # 使用 name 匹配的方式更稳健，即使模块被嵌套也能找到
+    mm_projector_param_count = 0
+    for name, param in model.named_parameters():
+        if "mm_projector" in name:
+            param.requires_grad = True
+            mm_projector_param_count += 1
+    if mm_projector_param_count > 0:
+        print(f"✅ mm_projector (TemporalTransformer) 设置为可训练（全参数）: {mm_projector_param_count} 个参数")
     
     # 确保 PEFT 包装后，mm_projector 仍然在正确的设备上
     # 检查 mm_projector 是否被正确包装，如果设备不对则修复
@@ -310,3 +321,15 @@ def train():
 
 if __name__ == "__main__":
     train()
+
+# Day 3：训练您的创新模块 T-LoRA-VLLM
+# python train_mem.py \
+#     --output_dir ./checkpoints/T_LoRA_Temporal_Adapter \
+#     --per_device_train_batch_size 2 \
+#     --gradient_accumulation_steps 4 \
+#     --learning_rate 2e-4 \
+#     --max_steps 500 \
+#     --logging_steps 20 \
+#     --save_strategy "steps" \
+#     --save_steps 250 \
+#     --save_total_limit 2
