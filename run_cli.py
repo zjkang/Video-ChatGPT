@@ -8,6 +8,7 @@ from video_chatgpt.eval.model_utils import initialize_model, load_video
 # 修正点：去掉了 .model 中间层
 from video_chatgpt.video_conversation import conv_templates, SeparatorStyle
 from video_chatgpt.model.utils import KeywordsStoppingCriteria
+from video_chatgpt.inference import get_spatio_temporal_features_torch
 
 def main(args):
     # 1. 加载模型
@@ -25,11 +26,20 @@ def main(args):
         print("❌ Error: Failed to load video frames.")
         return
 
-    # 3. 图像预处理
+    # 3. 图像预处理和特征提取
     try:
-        video_process = image_processor.preprocess(video_frames, return_tensors='pt')['pixel_values']
-        video_process = video_process.half().to(model.device)
-        tensor = video_process.unsqueeze(0) # [1, T, C, H, W]
+        # 预处理视频帧
+        image_tensor = image_processor.preprocess(video_frames, return_tensors='pt')['pixel_values']
+        image_tensor = image_tensor.half().to(model.device)
+        
+        # 使用 vision_tower 提取视频特征
+        with torch.no_grad():
+            image_forward_outs = vision_tower(image_tensor, output_hidden_states=True)
+            frame_features = image_forward_outs.hidden_states[-2][:, 1:]  # Use second to last layer as in LLaVA
+        
+        # 生成时空特征
+        video_spatio_temporal_features = get_spatio_temporal_features_torch(frame_features)
+        
     except Exception as e:
         print(f"❌ Error during video preprocessing: {e}")
         return
@@ -39,11 +49,17 @@ def main(args):
     conv = conv_templates[conv_mode].copy()
     roles = conv.roles
     
-    prompt_text = args.question
-    if "<video>" not in prompt_text:
-        prompt_text = f"<video>\n{prompt_text}"
+    # 准备问题字符串（包含 video tokens）
+    DEFAULT_VID_START_TOKEN = "<vid_start>"
+    DEFAULT_VID_END_TOKEN = "<vid_end>"
+    DEFAULT_VIDEO_PATCH_TOKEN = "<vid_patch>"
+    
+    if model.get_model().vision_config.use_vid_start_end:
+        qs = args.question + '\n' + DEFAULT_VID_START_TOKEN + DEFAULT_VIDEO_PATCH_TOKEN * video_token_len + DEFAULT_VID_END_TOKEN
+    else:
+        qs = args.question + '\n' + DEFAULT_VIDEO_PATCH_TOKEN * video_token_len
         
-    conv.append_message(roles[0], prompt_text)
+    conv.append_message(roles[0], qs)
     conv.append_message(roles[1], None)
     prompt = conv.get_prompt()
 
@@ -51,18 +67,17 @@ def main(args):
     print(f"🤖 Asking: {args.question}")
     
     inputs = tokenizer([prompt])
-    
-    # 这里的 input_ids 已经是 List，会在 model.forward 里被我们的补丁转为 Tensor
     input_ids = torch.as_tensor(inputs.input_ids).cuda()
     
     stop_str = conv.sep if conv.sep_style != SeparatorStyle.TWO else conv.sep2
     keywords = [stop_str]
     stopping_criteria = KeywordsStoppingCriteria(keywords, tokenizer, input_ids)
 
+    # 6. 运行模型推理
     with torch.inference_mode():
         output_ids = model.generate(
             input_ids,
-            images=tensor, 
+            video_spatio_temporal_features=video_spatio_temporal_features.unsqueeze(0),
             do_sample=True,
             temperature=0.2,
             max_new_tokens=1024,
