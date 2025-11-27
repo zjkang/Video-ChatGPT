@@ -70,10 +70,10 @@ class MiniVideoDataset(Dataset):
         q = item['q']
         a = item['a']
         
-        # 构造 Prompt - 添加 100 个 <vid_patch> tokens 来插入视频特征
-        # 格式: "Human: <video> <vid_patch> x 100 {q}\nAssistant: {a}</s>"
-        num_video_tokens = 100  # 对应 100 帧视频
-        video_tokens = "<vid_patch>" * num_video_tokens
+        # 构造 Prompt - 添加帧级 <vid_patch> tokens（用空格隔开，确保 tokenizer 识别为多个 token）
+        # 格式: "Human: <video> <vid_patch> <vid_patch> ... {q}\nAssistant: {a}</s>"
+        num_video_tokens = video_features.shape[0]  # 使用特征长度（默认 100 帧）
+        video_tokens = " ".join(["<vid_patch>"] * num_video_tokens)
         prompt = f"Human: <video> {video_tokens} {q}\nAssistant: {a}</s>"
         
         # Tokenize
@@ -223,7 +223,7 @@ def train():
     config = LoraConfig(
         r=8,
         lora_alpha=16,
-        target_modules=["q_proj", "v_proj", "mm_projector"],  # Baseline: mm_projector 是 Linear，支持 LoRA
+        target_modules=["q_proj", "v_proj"],  # 仅在 LLM 上做 LoRA，mm_projector 全量训练
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM"
