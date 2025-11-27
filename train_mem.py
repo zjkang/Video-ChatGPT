@@ -25,6 +25,7 @@ class ModelArguments:
 class DataArguments:
     data_path: str = field(default="data/mini_dataset/mini_train.json", metadata={"help": "Path to the training data."})
     features_folder: str = field(default="data/mini_dataset/features", metadata={"help": "Path to video features."})
+    num_frames: Optional[int] = field(default=None, metadata={"help": "Number of frames per video. If None, will use the actual frame count from feature files."})
 
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):
@@ -42,11 +43,12 @@ class TrainingArguments(transformers.TrainingArguments):
 
 # --- 2. 数据集加载器 (MiniVideoDataset) ---
 class MiniVideoDataset(Dataset):
-    def __init__(self, data_path, features_folder, tokenizer):
+    def __init__(self, data_path, features_folder, tokenizer, num_frames=None):
         self.data = json.load(open(data_path))
         self.features_folder = features_folder
         self.tokenizer = tokenizer
         self.ignore_index = -100
+        self.num_frames = num_frames  # 如果为 None，则根据实际加载的特征文件动态确定
 
     def __len__(self):
         return len(self.data)
@@ -57,14 +59,22 @@ class MiniVideoDataset(Dataset):
         
         # 1. 加载视频特征 (.pkl file)
         pkl_path = os.path.join(self.features_folder, f"{video_id}.pkl")
-        # 必须初始化为 numpy 数组 (而不是 torch tensor)
-        video_features = np.zeros((100, 1024), dtype=np.float32) 
+        video_features = None
         if os.path.exists(pkl_path):
             try:
                 with open(pkl_path, 'rb') as f:
                     video_features = pickle.load(f)
-            except:
-                print(f"Warning: Failed to load feature for {video_id}. Using zeros.")
+                # 确保是 numpy 数组
+                if not isinstance(video_features, np.ndarray):
+                    video_features = np.array(video_features)
+            except Exception as e:
+                print(f"Warning: Failed to load feature for {video_id}: {e}. Using zeros.")
+                video_features = None
+        
+        # 如果加载失败或文件不存在，使用默认值
+        if video_features is None:
+            default_frames = self.num_frames if self.num_frames is not None else 16
+            video_features = np.zeros((default_frames, 1024), dtype=np.float32)
 
         # 2. 处理对话文本
         q = item['q']
@@ -72,7 +82,7 @@ class MiniVideoDataset(Dataset):
         
         # 构造 Prompt - 添加帧级 <vid_patch> tokens（用空格隔开，确保 tokenizer 识别为多个 token）
         # 格式: "Human: <video> <vid_patch> <vid_patch> ... {q}\nAssistant: {a}</s>"
-        num_video_tokens = video_features.shape[0]  # 使用特征长度（默认 100 帧）
+        num_video_tokens = video_features.shape[0]  # 使用特征长度（动态，可以是 16/32/100 等）
         video_tokens = " ".join(["<vid_patch>"] * num_video_tokens)
         prompt = f"Human: <video> {video_tokens} {q}\nAssistant: {a}</s>"
         
@@ -272,7 +282,12 @@ def train():
     model.print_trainable_parameters() 
 
     # --- C. 准备数据 ---
-    dataset = MiniVideoDataset(data_args.data_path, data_args.features_folder, tokenizer)
+    dataset = MiniVideoDataset(
+        data_args.data_path, 
+        data_args.features_folder, 
+        tokenizer,
+        num_frames=data_args.num_frames
+    )
     collator = DataCollatorForVideo(tokenizer=tokenizer)
 
     # --- D. 启动训练 ---
