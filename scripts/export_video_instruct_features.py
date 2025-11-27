@@ -47,7 +47,13 @@ def parse_args():
         "--subset_size",
         type=int,
         default=None,
-        help="If set, only process the first N samples (useful for debugging).",
+        help="If set, only process N samples (useful for debugging).",
+    )
+    parser.add_argument(
+        "--start_index",
+        type=int,
+        default=0,
+        help="Start processing from this index (useful for batch processing).",
     )
     parser.add_argument(
         "--save_dtype",
@@ -135,11 +141,21 @@ def main():
     ensure_dir(args.output_dir)
 
     dataset = load_dataset(args.hf_dataset_name, split=args.split)
+    total_size = len(dataset)
+    
+    # Handle start_index and subset_size
+    start_idx = max(0, args.start_index)
+    if start_idx >= total_size:
+        print(f"❌ start_index ({start_idx}) >= dataset size ({total_size}). Nothing to process.")
+        return
+    
     if args.subset_size is not None:
-        dataset = dataset.select(range(min(args.subset_size, len(dataset))))
-        print(f"✅ Using subset of size {len(dataset)} from {args.hf_dataset_name}/{args.split}")
+        end_idx = min(start_idx + args.subset_size, total_size)
+        dataset = dataset.select(range(start_idx, end_idx))
+        print(f"✅ Processing samples {start_idx} to {end_idx-1} (total: {len(dataset)} samples)")
     else:
-        print(f"✅ Loaded {len(dataset)} samples from {args.hf_dataset_name}/{args.split}")
+        dataset = dataset.select(range(start_idx, total_size))
+        print(f"✅ Processing samples {start_idx} to {total_size-1} (total: {len(dataset)} samples)")
 
     device_str = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
     device = torch.device(device_str)
