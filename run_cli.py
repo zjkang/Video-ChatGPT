@@ -74,9 +74,10 @@ def main(args):
     stopping_criteria = KeywordsStoppingCriteria(keywords, tokenizer, input_ids)
 
     # 6. 运行模型推理
+    # 注意：PEFT 包装后的模型要求所有参数都是关键字参数
     with torch.inference_mode():
         output_ids = model.generate(
-            input_ids,
+            input_ids=input_ids,  # 改为关键字参数
             video_spatio_temporal_features=video_spatio_temporal_features.unsqueeze(0),
             do_sample=True,
             temperature=0.2,
