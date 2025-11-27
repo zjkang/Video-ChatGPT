@@ -25,7 +25,7 @@ class VideoInstruct100KDataset(Dataset):
         tokenizer: PreTrainedTokenizer,
         split: str = "train",
         num_frames: int = 16,
-        hf_dataset_name: str = "vidore/video-instruct-100k",
+        hf_dataset_name: str = "MBZUAI/VideoInstruct-100K",
         clip_model_name: str = "openai/clip-vit-large-patch14",
         subset_size: Optional[int] = None,
         device: Optional[str] = None,

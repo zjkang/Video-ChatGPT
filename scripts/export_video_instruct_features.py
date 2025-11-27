@@ -34,7 +34,7 @@ def parse_args():
     parser.add_argument(
         "--hf_dataset_name",
         type=str,
-        default="vidore/video-instruct-100k",
+        default="MBZUAI/VideoInstruct-100K",
         help="HuggingFace dataset name.",
     )
     parser.add_argument(
