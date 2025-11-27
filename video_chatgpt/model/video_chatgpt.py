@@ -4,7 +4,6 @@ import torch.nn as nn
 from torch.nn import CrossEntropyLoss
 from transformers import AutoConfig, AutoModelForCausalLM, LlamaConfig, LlamaModel, LlamaForCausalLM
 from transformers.modeling_outputs import BaseModelOutputWithPast, CausalLMOutputWithPast
-from video_chatgpt.model.temporal_transformer import TemporalTransformer
 
 DEFAULT_VIDEO_TOKEN = "<video>"
 DEFAULT_VIDEO_PATCH_TOKEN = "<vid_patch>"
@@ -37,12 +36,7 @@ class VideoChatGPTLlamaModel(LlamaModel):
             self.vision_config = VisionConfig()
 
         if hasattr(config, "use_mm_proj"):
-            # 使用 TemporalTransformer 替代简单的 Linear 层
-            self.mm_projector = TemporalTransformer(
-                input_dim=config.mm_hidden_size,
-                output_dim=config.hidden_size,
-                num_layers=2
-            )
+            self.mm_projector = nn.Linear(config.mm_hidden_size, config.hidden_size)
 
     def initialize_vision_modules(self, pretrain_mm_mlp_adapter=None, tune_mm_mlp_adapter=False):
         vision_config = self.vision_config
@@ -52,20 +46,11 @@ class VideoChatGPTLlamaModel(LlamaModel):
         self.config.mm_hidden_size = vision_config.hidden_size
 
         if not hasattr(self, 'mm_projector'):
-            # 使用 TemporalTransformer 替代简单的 Linear 层
-            self.mm_projector = TemporalTransformer(
-                input_dim=vision_config.hidden_size,
-                output_dim=self.config.hidden_size,
-                num_layers=2
-            )
+            self.mm_projector = nn.Linear(vision_config.hidden_size, self.config.hidden_size)
 
         if pretrain_mm_mlp_adapter is not None:
-            # 注意：如果预训练权重是 Linear 层的，需要特殊处理
-            # 这里暂时跳过加载，因为 TemporalTransformer 结构不同
-            # 如果需要迁移权重，需要实现权重转换逻辑
-            print("⚠️ Warning: Pretrained mm_projector weights are not loaded because TemporalTransformer structure differs from Linear.")
-            # mm_projector_weights = torch.load(pretrain_mm_mlp_adapter, map_location='cpu')
-            # self.mm_projector.load_state_dict({k.split('.')[-1]: v for k, v in mm_projector_weights.items()})
+            mm_projector_weights = torch.load(pretrain_mm_mlp_adapter, map_location='cpu')
+            self.mm_projector.load_state_dict({k.split('.')[-1]: v for k, v in mm_projector_weights.items()})
 
         return dict(
             video_token_len=num_patches,
@@ -111,12 +96,10 @@ class VideoChatGPTLlamaModel(LlamaModel):
             video_features = video_features.to(projector_dtype)
             
             # 使用 mm_projector 的 dtype 创建 dummy_video_features
-            # TemporalTransformer 期望输入 [B, Time, Dim]，所以需要添加 batch 维度
-            dummy_video_features = torch.zeros(1, video_features.shape[1], 1024, 
+            dummy_video_features = torch.zeros(video_features.shape[1], 1024, 
                                                device=model_device,
                                                dtype=projector_dtype)
             dummy_video_features = self.mm_projector(dummy_video_features).to(projector_dtype)
-            dummy_video_features = dummy_video_features[0]  # 移除 batch 维度，恢复为 [Time, Dim]
 
             new_input_embeds = []
             cur_video_idx = 0

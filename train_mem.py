@@ -214,20 +214,8 @@ def train():
         
         print(f"✅ Vision modules initialized:")
         print(f"   - mm_projector: {model_vision_dict['vision_config'].hidden_size} -> {model.config.hidden_size}")
-        # 检查 mm_projector 的类型（可能是 TemporalTransformer 或 Linear）
-        mm_projector = model.get_model().mm_projector
-        if hasattr(mm_projector, 'weight'):
-            # Linear 层
-            print(f"   - mm_projector type: Linear")
-            print(f"   - mm_projector device: {mm_projector.weight.device}")
-        elif hasattr(mm_projector, 'output_proj'):
-            # TemporalTransformer
-            print(f"   - mm_projector type: TemporalTransformer")
-            print(f"   - mm_projector device: {next(mm_projector.parameters()).device}")
-            print(f"   - TemporalTransformer layers: {len(mm_projector.transformer.layers)}")
-        else:
-            print(f"   - mm_projector type: {type(mm_projector)}")
-            print(f"   - mm_projector device: {next(mm_projector.parameters()).device}")
+        print(f"   - mm_projector type: Linear (Baseline)")
+        print(f"   - mm_projector device: {model.get_model().mm_projector.weight.device}")
         print(f"   - video_token_len: {model_vision_dict['video_token_len']}")
     else:
         print("✅ mm_projector already exists")
@@ -235,24 +223,13 @@ def train():
     config = LoraConfig(
         r=8,
         lora_alpha=16,
-        target_modules=["q_proj", "v_proj"],  # 移除 mm_projector，因为 TemporalTransformer 不支持 LoRA
+        target_modules=["q_proj", "v_proj", "mm_projector"],  # Baseline: mm_projector 是 Linear，支持 LoRA
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM"
     )
     
     model = get_peft_model(model, config)
-    
-    # 设置 mm_projector (TemporalTransformer) 为可训练（不使用 LoRA，直接全参数训练）
-    # 因为 TemporalTransformer 是轻量级模块，参数量不大，可以直接全参数训练
-    # 使用 name 匹配的方式更稳健，即使模块被嵌套也能找到
-    mm_projector_param_count = 0
-    for name, param in model.named_parameters():
-        if "mm_projector" in name:
-            param.requires_grad = True
-            mm_projector_param_count += 1
-    if mm_projector_param_count > 0:
-        print(f"✅ mm_projector (TemporalTransformer) 设置为可训练（全参数）: {mm_projector_param_count} 个参数")
     
     # 确保 PEFT 包装后，mm_projector 仍然在正确的设备上
     # 检查 mm_projector 是否被正确包装，如果设备不对则修复
