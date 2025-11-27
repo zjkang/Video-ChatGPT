@@ -121,16 +121,22 @@ def convert_to_training_format(features_dir, output_dir, target_frames=100):
                 data = np.mean(data, axis=1)
                 converted += 1
             elif len(data.shape) == 2:
-                # 已经是 (T, 1024) 格式
+                if data.shape[0] == 356 and data.shape[1] == 1024:
+                    # (356, 1024) = (100 temporal + 256 spatial, 1024)
+                    # 提取前 100 个 temporal tokens
+                    data = data[:100]  # 取前 100 个 temporal tokens
+                    converted += 1
+                
+                # 调整帧数到目标值
                 if data.shape[0] != target_frames:
-                    # 如果帧数不对，需要 padding 或截断
                     if data.shape[0] < target_frames:
                         # Padding
                         padding = np.zeros((target_frames - data.shape[0], data.shape[1]), dtype=data.dtype)
                         data = np.concatenate([data, padding], axis=0)
                     else:
-                        # 截断
-                        data = data[:target_frames]
+                        # 均匀采样到目标帧数
+                        indices = np.linspace(0, data.shape[0] - 1, num=target_frames, dtype=int)
+                        data = data[indices]
                 skipped += 1
             else:
                 print(f"⚠️  跳过 {pkl_file.name}: 未知格式 {data.shape}")
@@ -200,7 +206,11 @@ def main():
             print(f"   ⚠️  需要转换: (T, 256, 1024) -> (T, 1024)")
             needs_conversion = True
         elif len(sample_shape) == 2:
-            if sample_shape[0] != args.target_frames:
+            if sample_shape == (356, 1024):
+                print(f"   ⚠️  需要转换: (356, 1024) -> ({args.target_frames}, 1024)")
+                print(f"      (356 = 100 temporal + 256 spatial, 提取前 100 个 temporal tokens)")
+                needs_conversion = True
+            elif sample_shape[0] != args.target_frames:
                 print(f"   ⚠️  需要调整帧数: {sample_shape[0]} -> {args.target_frames}")
                 needs_conversion = True
             else:
