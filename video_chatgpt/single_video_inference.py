@@ -28,9 +28,14 @@ DEFAULT_VID_END_TOKEN = "<vid_end>"
 
 
 
+# Import from inference.py to use the unified function
+from video_chatgpt.inference import get_temporal_features_torch
+
+# Keep old function for backward compatibility (if needed)
 def get_spatio_temporal_features_torch(features):
     """
     Computes spatio-temporal features from given features.
+    (Kept for backward compatibility, but should use get_temporal_features_torch instead)
 
     Parameters:
     features (torch.Tensor): Input features to process.
@@ -82,10 +87,12 @@ def video_chatgpt_infer(video_frames, question, conv_mode, model, vision_tower, 
     """
 
     # Prepare question string for the model
+    # Use fixed 100 tokens (consistent with training, temporal only)
+    num_tokens = 100
     if model.get_model().vision_config.use_vid_start_end:
-        qs = question + '\n' + DEFAULT_VID_START_TOKEN + DEFAULT_VIDEO_PATCH_TOKEN * video_token_len + DEFAULT_VID_END_TOKEN
+        qs = question + '\n' + DEFAULT_VID_START_TOKEN + DEFAULT_VIDEO_PATCH_TOKEN * num_tokens + DEFAULT_VID_END_TOKEN
     else:
-        qs = question + '\n' + DEFAULT_VIDEO_PATCH_TOKEN * video_token_len
+        qs = question + '\n' + DEFAULT_VIDEO_PATCH_TOKEN * num_tokens
 
     # Prepare conversation prompt
     conv = conv_templates[conv_mode].copy()
@@ -102,11 +109,11 @@ def video_chatgpt_infer(video_frames, question, conv_mode, model, vision_tower, 
     # Move image tensor to GPU and reduce precision to half
     image_tensor = image_tensor.half().cuda()
 
-    # Generate video spatio-temporal features
+    # Generate video temporal features (only temporal tokens, consistent with training)
     with torch.no_grad():
         image_forward_outs = vision_tower(image_tensor, output_hidden_states=True)
         frame_features = image_forward_outs.hidden_states[-2][:, 1:] # Use second to last layer as in LLaVA
-    video_spatio_temporal_features = get_spatio_temporal_features_torch(frame_features)
+    video_spatio_temporal_features = get_temporal_features_torch(frame_features)  # [100, 1024]
 
     # Move inputs to GPU
     input_ids = torch.as_tensor(inputs.input_ids).cuda()

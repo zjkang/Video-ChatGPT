@@ -51,17 +51,31 @@ class Chat:
         msg = "Received."
         return msg
 
-    def get_spatio_temporal_features_torch(self, features):
+    def get_temporal_features_torch(self, features):
+        """
+        Computes temporal features from given features (only temporal tokens, consistent with training).
+        
+        Parameters:
+        features (torch.Tensor): Input features to process. Shape: [t, s, c]
+        
+        Returns:
+        torch.Tensor: Temporal features. Shape: [100, c] - only temporal tokens, padded to 100.
+        """
         t, s, c = features.shape
-        temporal_tokens = torch.mean(features, dim=1)
+        
+        # Compute temporal tokens as the mean along the spatial axis (same as training)
+        temporal_tokens = torch.mean(features, dim=1)  # [t, c] - 对空间维度平均
+        
+        # Padding to 100
         padding_size = 100 - t
         if padding_size > 0:
-            temporal_tokens = torch.cat((temporal_tokens, torch.zeros(padding_size, c, device=features.device)), dim=0)
-
-        spatial_tokens = torch.mean(features, dim=0)
-        concat_tokens = torch.cat([temporal_tokens, spatial_tokens], dim=0).half()
-
-        return concat_tokens
+            padding = torch.zeros(padding_size, c, device=features.device)
+            temporal_tokens = torch.cat((temporal_tokens, padding), dim=0)
+        elif t > 100:
+            # If more than 100 frames, truncate
+            temporal_tokens = temporal_tokens[:100]
+        
+        return temporal_tokens.half()  # [100, c]
 
     def answer(self, state, img_list, temperature, max_new_tokens, first_run):
         if state.skip_next:
@@ -110,7 +124,8 @@ class Chat:
             select_hidden_state_layer = -2  # Same as used in LLaVA
             select_hidden_state = image_forward_outs.hidden_states[select_hidden_state_layer]
             frame_features = select_hidden_state[:, 1:]
-        video_spatio_temporal_features = self.get_spatio_temporal_features_torch(frame_features)
+        # Only use temporal tokens (consistent with training)
+        video_spatio_temporal_features = self.get_temporal_features_torch(frame_features)  # [100, 1024]
 
         with torch.inference_mode():
             output_ids = self.model.generate(

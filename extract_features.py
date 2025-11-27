@@ -56,8 +56,8 @@ for file in tqdm(video_files):
     # 4. 提取特征
     with torch.no_grad():
         outputs = vision_tower(video_process, output_hidden_states=True)
-        # Video-ChatGPT 逻辑：取最后一层特征
-        features = outputs.last_hidden_state # [100, 257, 1024]
+        # 使用倒数第二层（与推理一致，LLaVA的做法）
+        features = outputs.hidden_states[-2]  # [100, 257, 1024]
         
         # 关键步骤：对空间维度 (257) 做平均池化 -> 得到 [100, 1024]
         # 忽略第一个 CLS token，对剩下的 256 个 patch 做平均

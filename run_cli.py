@@ -8,7 +8,7 @@ from video_chatgpt.eval.model_utils import initialize_model, load_video
 # 修正点：去掉了 .model 中间层
 from video_chatgpt.video_conversation import conv_templates, SeparatorStyle
 from video_chatgpt.model.utils import KeywordsStoppingCriteria
-from video_chatgpt.inference import get_spatio_temporal_features_torch
+from video_chatgpt.inference import get_temporal_features_torch
 
 def main(args):
     # 1. 加载模型
@@ -37,8 +37,12 @@ def main(args):
             image_forward_outs = vision_tower(image_tensor, output_hidden_states=True)
             frame_features = image_forward_outs.hidden_states[-2][:, 1:]  # Use second to last layer as in LLaVA
         
-        # 生成时空特征
-        video_spatio_temporal_features = get_spatio_temporal_features_torch(frame_features)
+        # 只使用 temporal tokens（与训练一致）
+        video_spatio_temporal_features = get_temporal_features_torch(frame_features)  # [100, 1024]
+        
+        # 固定为 100 个 tokens（与训练一致）
+        actual_video_token_len = 100
+        print(f"📊 Using {actual_video_token_len} temporal tokens (consistent with training)")
         
     except Exception as e:
         print(f"❌ Error during video preprocessing: {e}")
@@ -50,14 +54,15 @@ def main(args):
     roles = conv.roles
     
     # 准备问题字符串（包含 video tokens）
+    # 使用实际的视频特征数量，而不是固定的 video_token_len
     DEFAULT_VID_START_TOKEN = "<vid_start>"
     DEFAULT_VID_END_TOKEN = "<vid_end>"
     DEFAULT_VIDEO_PATCH_TOKEN = "<vid_patch>"
     
     if model.get_model().vision_config.use_vid_start_end:
-        qs = args.question + '\n' + DEFAULT_VID_START_TOKEN + DEFAULT_VIDEO_PATCH_TOKEN * video_token_len + DEFAULT_VID_END_TOKEN
+        qs = args.question + '\n' + DEFAULT_VID_START_TOKEN + DEFAULT_VIDEO_PATCH_TOKEN * actual_video_token_len + DEFAULT_VID_END_TOKEN
     else:
-        qs = args.question + '\n' + DEFAULT_VIDEO_PATCH_TOKEN * video_token_len
+        qs = args.question + '\n' + DEFAULT_VIDEO_PATCH_TOKEN * actual_video_token_len
         
     conv.append_message(roles[0], qs)
     conv.append_message(roles[1], None)
