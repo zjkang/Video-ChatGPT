@@ -1,4 +1,6 @@
+import os
 import torch
+import torch.nn as nn
 import numpy as np
 # 1. 【全局导入】必须放在最外面！
 from decord import VideoReader, cpu
@@ -60,29 +62,87 @@ def initialize_model(model_name, projection_path=None):
     if hasattr(model.get_model(), "vision_config"):
         model.get_model().vision_config.vid_patch_token = vid_patch_token_idx
 
-    # 5. 注入 Adapter (解决 Unexpected Keys)
-    if projection_path:
-        print(f"Loading weights from {projection_path}")
-        state_dict = torch.load(projection_path, map_location='cpu')
-        
-        if not hasattr(model.get_model(), 'mm_projector'):
-            from video_chatgpt.model.temporal_transformer import TemporalTransformer
-            model.get_model().mm_projector = TemporalTransformer(
-                input_dim=1024,
-                output_dim=4096,
-                num_layers=2
-            ).to(model.device)
+    # 5. 初始化 mm_projector（如果不存在，在 baseline-2 分支应该是 Linear）
+    if not hasattr(model.get_model(), 'mm_projector'):
+        # 确保 vision_config 存在
+        if not hasattr(model.get_model(), 'vision_config'):
+            from video_chatgpt.model.video_chatgpt import VisionConfig
+            model.get_model().vision_config = VisionConfig()
+        # 初始化 mm_projector（baseline-2 分支使用 Linear）
+        model.get_model().initialize_vision_modules()
+        print("✅ mm_projector initialized (Linear in baseline-2 branch)")
 
-        for k, v in state_dict.items():
-            if 'mm_projector' in k:
-                if 'weight' in k:
-                    print("✅ Found projector weight, injecting...")
-                    model.get_model().mm_projector.weight.data = v.to(model.device).to(torch.float16)
-                elif 'bias' in k:
-                    print("✅ Found projector bias, injecting...")
-                    model.get_model().mm_projector.bias.data = v.to(model.device).to(torch.float16)
+    # 6. 加载 Adapter
+    if projection_path:
+        print(f"Loading adapter from {projection_path}")
         
-        print("🎉 Adapter weights injected manually!")
+        # 检查是目录（PEFT adapter）还是文件
+        if os.path.isdir(projection_path):
+            # PEFT adapter 目录格式
+            print("📦 Detected PEFT adapter directory, loading with PeftModel...")
+            try:
+                from peft import PeftModel
+                model = PeftModel.from_pretrained(model, projection_path)
+                print("✅ PEFT adapter loaded successfully!")
+            except Exception as e:
+                print(f"❌ Error: Failed to load PEFT adapter: {e}")
+                raise e
+        
+        elif os.path.isfile(projection_path):
+            # 文件路径：可能是 adapter_model.bin 或旧格式的权重文件
+            file_name = os.path.basename(projection_path)
+            dir_name = os.path.dirname(projection_path) or "."
+            
+            # 检查是否是 adapter_model.bin（PEFT 格式）
+            if file_name in ["adapter_model.bin", "adapter_model.safetensors"]:
+                # 这是 PEFT adapter 文件，需要从父目录加载
+                print(f"📦 Detected PEFT adapter file, loading from parent directory: {dir_name}")
+                if dir_name and os.path.isdir(dir_name):
+                    try:
+                        from peft import PeftModel
+                        model = PeftModel.from_pretrained(model, dir_name)
+                        print("✅ PEFT adapter loaded successfully!")
+                    except Exception as e:
+                        print(f"❌ Error: Failed to load PEFT adapter from directory: {e}")
+                        raise e
+                else:
+                    print(f"❌ Error: Parent directory not found: {dir_name}")
+                    print("   Please use directory path instead: --projection_path ./checkpoints/Baseline_Linear_Adapter")
+                    raise ValueError(f"Parent directory not found: {dir_name}")
+            else:
+                # 旧格式：单个 .bin 文件（非 PEFT 格式）
+                print("📄 Detected single weight file (old format), loading manually...")
+                state_dict = torch.load(projection_path, map_location='cpu')
+                
+                # 检查是否是 PEFT LoRA 格式（键名包含 lora_A 或 lora_B）
+                is_peft_format = any('lora_A' in k or 'lora_B' in k for k in state_dict.keys())
+                
+                if is_peft_format:
+                    # 这是 PEFT adapter_model.bin，应该从父目录加载
+                    print("⚠️ Warning: Detected PEFT LoRA format in file, loading from parent directory")
+                    if dir_name and os.path.isdir(dir_name):
+                        from peft import PeftModel
+                        model = PeftModel.from_pretrained(model, dir_name)
+                        print("✅ PEFT adapter loaded from parent directory!")
+                    else:
+                        raise ValueError(f"Cannot load PEFT adapter: parent directory not found: {dir_name}")
+                else:
+                    # 旧格式：直接加载权重（mm_projector 应该是 Linear）
+                    for k, v in state_dict.items():
+                        if 'mm_projector' in k:
+                            # 检查 mm_projector 的类型
+                            if not hasattr(model.get_model().mm_projector, 'weight'):
+                                print(f"⚠️ Warning: mm_projector is {type(model.get_model().mm_projector)}, not Linear")
+                                print("   Skipping manual weight injection for non-Linear projector")
+                                continue
+                            if 'weight' in k:
+                                print("✅ Found projector weight, injecting...")
+                                model.get_model().mm_projector.weight.data = v.to(model.device).to(torch.float16)
+                            elif 'bias' in k:
+                                print("✅ Found projector bias, injecting...")
+                                model.get_model().mm_projector.bias.data = v.to(model.device).to(torch.float16)
+                    
+                    print("🎉 Adapter weights injected manually!")
 
     model.config.mm_use_vid_start_end = True
     model.config.mm_vision_select_layer = -2
