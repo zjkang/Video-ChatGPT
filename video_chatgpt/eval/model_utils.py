@@ -17,6 +17,27 @@ def load_video(video_path, num_frames=100):
     pixel_values = vr.get_batch(idx).asnumpy()
     return pixel_values
 
+def _ensure_model_on_device(model):
+    """
+    确保模型（包括 PEFT 包装的模块）在正确的设备上，并设置正确的 dtype。
+    
+    Args:
+        model: 模型对象（可能是 PeftModel 包装的）
+    
+    Returns:
+        model: 移动后的模型
+    """
+    # 获取模型设备
+    model_device = next(model.get_model().embed_tokens.parameters()).device
+    # 移动整个模型到正确的设备（这会移动所有子模块，包括 PEFT 包装的模块）
+    model = model.to(model_device)
+    # 确保 mm_projector 的 dtype 是 float16
+    if hasattr(model.get_model(), 'mm_projector'):
+        mm_projector = model.get_model().mm_projector
+        mm_projector = mm_projector.to(torch.float16)
+        print(f"✅ mm_projector moved to {model_device} (dtype: float16)")
+    return model
+
 def initialize_model(model_name, projection_path=None):
     print(f"Loading model: {model_name}...")
     tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
@@ -84,6 +105,8 @@ def initialize_model(model_name, projection_path=None):
                 from peft import PeftModel
                 model = PeftModel.from_pretrained(model, projection_path)
                 print("✅ PEFT adapter loaded successfully!")
+                # 确保所有模块在正确的设备上
+                model = _ensure_model_on_device(model)
             except Exception as e:
                 print(f"❌ Error: Failed to load PEFT adapter: {e}")
                 raise e
@@ -102,6 +125,8 @@ def initialize_model(model_name, projection_path=None):
                         from peft import PeftModel
                         model = PeftModel.from_pretrained(model, dir_name)
                         print("✅ PEFT adapter loaded successfully!")
+                        # 确保所有模块在正确的设备上
+                        model = _ensure_model_on_device(model)
                     except Exception as e:
                         print(f"❌ Error: Failed to load PEFT adapter from directory: {e}")
                         raise e
@@ -124,6 +149,8 @@ def initialize_model(model_name, projection_path=None):
                         from peft import PeftModel
                         model = PeftModel.from_pretrained(model, dir_name)
                         print("✅ PEFT adapter loaded from parent directory!")
+                        # 确保所有模块在正确的设备上
+                        model = _ensure_model_on_device(model)
                     else:
                         raise ValueError(f"Cannot load PEFT adapter: parent directory not found: {dir_name}")
                 else:
