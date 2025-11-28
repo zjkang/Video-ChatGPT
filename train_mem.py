@@ -40,6 +40,8 @@ class TrainingArguments(transformers.TrainingArguments):
     save_strategy: str = field(default="no") # Dry Run 不保存
     output_dir: str = field(default="./outputs/baseline") # 输出目录
     remove_unused_columns: bool = field(default=False) # 防止 Trainer 移除 'video' 等中间键
+    logging_dir: Optional[str] = field(default="./logs", metadata={"help": "TensorBoard log directory"})
+    report_to: Optional[List[str]] = field(default_factory=lambda: ["tensorboard"], metadata={"help": "Report to tensorboard"})
 
 # --- 2. 数据集加载器 (MiniVideoDataset) ---
 class MiniVideoDataset(Dataset):
