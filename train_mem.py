@@ -315,6 +315,28 @@ def train():
     collator = DataCollatorForVideo(tokenizer=tokenizer)
 
     # --- D. 启动训练 ---
+    # 确保 report_to 是列表格式
+    if training_args.report_to is None:
+        training_args.report_to = ["tensorboard"]
+    elif isinstance(training_args.report_to, str):
+        training_args.report_to = [training_args.report_to]
+    
+    # 确保 logging_dir 存在
+    if training_args.logging_dir:
+        os.makedirs(training_args.logging_dir, exist_ok=True)
+    
+    print(f"📊 TensorBoard 配置:")
+    print(f"   - logging_dir: {training_args.logging_dir}")
+    print(f"   - report_to: {training_args.report_to}")
+    print(f"   - logging_steps: {training_args.logging_steps}")
+    
+    # 验证 TensorBoard 是否可用
+    try:
+        from transformers.integrations import TensorBoardCallback
+        print(f"   ✅ TensorBoard callback 可用")
+    except ImportError:
+        print(f"   ⚠️  TensorBoard callback 不可用，尝试安装: pip install tensorboard")
+    
     trainer = Trainer(
         model=model,
         tokenizer=tokenizer,
@@ -322,6 +344,9 @@ def train():
         train_dataset=dataset,
         data_collator=collator
     )
+    
+    # 检查 Trainer 的 callbacks
+    print(f"📋 Trainer callbacks: {[type(cb).__name__ for cb in trainer.callback_handler.callbacks]}")
 
     print("🔥 Starting Training (Dry Run)...")
     trainer.train()

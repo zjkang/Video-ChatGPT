@@ -14,3 +14,4 @@ accelerate==0.20.3
 tokenizers>=0.13.3
 pydantic==1.10.7
 datasets>=2.14.0
+tensorboard>=2.13.0
