@@ -55,7 +55,10 @@ class MiniVideoDataset(Dataset):
 
     def __getitem__(self, i) -> Dict[str, torch.Tensor]:
         item = self.data[i]
-        video_id = item['video_id']
+        # 支持不同的 video_id 字段名
+        video_id = item.get('video_id') or item.get('id') or item.get('video_id')
+        if video_id is None:
+            raise ValueError(f"Sample {i} has no video_id or id field")
         
         # 1. 加载视频特征 (.pkl file)
         pkl_path = os.path.join(self.features_folder, f"{video_id}.pkl")
@@ -77,8 +80,27 @@ class MiniVideoDataset(Dataset):
             video_features = np.zeros((default_frames, 1024), dtype=np.float32)
 
         # 2. 处理对话文本
-        q = item['q']
-        a = item['a']
+        # 支持两种格式：
+        # 格式1: {"video_id": "...", "q": "...", "a": "..."}
+        # 格式2: {"video_id": "...", "conversations": [{"from": "human", "value": "..."}, {"from": "assistant", "value": "..."}]}
+        if 'q' in item and 'a' in item:
+            q = item['q']
+            a = item['a']
+        elif 'conversations' in item:
+            conv = item['conversations']
+            humans = [c for c in conv if c.get("from") == "human"]
+            assists = [c for c in conv if c.get("from") == "assistant"]
+            if len(humans) > 0 and len(assists) > 0:
+                q = humans[0]["value"]
+                a = assists[0]["value"]
+            else:
+                # 如果没有找到对话，使用默认值
+                q = "Please describe this video."
+                a = "The video shows some generic content."
+        else:
+            # 如果两种格式都没有，使用默认值
+            q = "Please describe this video."
+            a = "The video shows some generic content."
         
         # 构造 Prompt - 添加帧级 <vid_patch> tokens（用空格隔开，确保 tokenizer 识别为多个 token）
         # 格式: "Human: <video> <vid_patch> <vid_patch> ... {q}\nAssistant: {a}</s>"
