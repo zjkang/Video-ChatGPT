@@ -5,6 +5,7 @@ import torch
 import numpy as np # 确保 numpy 导入，用于数据处理
 from dataclasses import dataclass, field
 from typing import Dict, Optional, Sequence, List
+from pathlib import Path
 
 import transformers
 from torch.utils.data import Dataset
@@ -187,6 +188,30 @@ class DataCollatorForVideo:
 def train():
     parser = transformers.HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+    
+    # 立即检查和修复 report_to 参数（在创建 Trainer 之前）
+    print(f"🔍 解析后的参数:")
+    print(f"   - report_to (原始): {training_args.report_to}, 类型: {type(training_args.report_to)}")
+    
+    # 处理 report_to 参数
+    if training_args.report_to is None:
+        training_args.report_to = ["tensorboard"]
+        print(f"   ✅ report_to 为 None，设置为 ['tensorboard']")
+    elif isinstance(training_args.report_to, str):
+        training_args.report_to = [training_args.report_to]
+        print(f"   ✅ report_to 是字符串，转换为列表: {training_args.report_to}")
+    elif isinstance(training_args.report_to, list):
+        if "tensorboard" not in training_args.report_to:
+            training_args.report_to.append("tensorboard")
+            print(f"   ✅ 添加 tensorboard 到 report_to: {training_args.report_to}")
+        else:
+            print(f"   ✅ report_to 已包含 tensorboard: {training_args.report_to}")
+    else:
+        print(f"   ⚠️  未知的 report_to 类型: {type(training_args.report_to)}")
+        training_args.report_to = ["tensorboard"]
+    
+    print(f"   - report_to (处理后): {training_args.report_to}")
+    print(f"   - logging_dir: {training_args.logging_dir}")
 
     # --- A. 加载 Tokenizer ---
     tokenizer = transformers.AutoTokenizer.from_pretrained(model_args.model_name_or_path, use_fast=False)
@@ -347,16 +372,135 @@ def train():
     
     # 检查 Trainer 的 callbacks
     print(f"📋 Trainer callbacks: {[type(cb).__name__ for cb in trainer.callback_handler.callbacks]}")
-
-    print("🔥 Starting Training (Dry Run)...")
+    
+    # 重要：检查 Trainer 的 args 中的 report_to
+    print(f"🔍 Trainer.args.report_to: {trainer.args.report_to}")
+    print(f"🔍 Trainer.args.logging_dir: {trainer.args.logging_dir}")
+    
+    # 如果 report_to 为空或没有 tensorboard，强制设置
+    if not trainer.args.report_to or "tensorboard" not in trainer.args.report_to:
+        print(f"⚠️  警告: report_to 中没有 tensorboard，强制添加...")
+        if trainer.args.report_to is None:
+            trainer.args.report_to = []
+        if "tensorboard" not in trainer.args.report_to:
+            trainer.args.report_to.append("tensorboard")
+        # 重新初始化 callbacks
+        trainer._init_callbacks()
+        print(f"✅ 已重新设置 report_to: {trainer.args.report_to}")
+        print(f"📋 更新后的 callbacks: {[type(cb).__name__ for cb in trainer.callback_handler.callbacks]}")
+    
+    # 验证 logging_dir 是绝对路径（某些版本需要）
+    if training_args.logging_dir and not os.path.isabs(training_args.logging_dir):
+        training_args.logging_dir = os.path.abspath(training_args.logging_dir)
+        print(f"📁 使用绝对路径: {training_args.logging_dir}")
+    
+    # 再次确保目录存在
+    os.makedirs(training_args.logging_dir, exist_ok=True)
+    print(f"📁 日志目录已创建: {training_args.logging_dir}")
+    
+    # 检查目录权限
+    if os.access(training_args.logging_dir, os.W_OK):
+        print(f"✅ 日志目录可写")
+    else:
+        print(f"❌ 警告: 日志目录不可写!")
+    
+    # 添加自定义 callback 来保存训练日志
+    class LogSaverCallback(transformers.TrainerCallback):
+        def __init__(self, output_dir, save_interval):
+            self.output_dir = output_dir
+            self.save_interval = max(1, save_interval)
+            os.makedirs(output_dir, exist_ok=True)
+        
+        def on_log(self, args, state, control, logs=None, **kwargs):
+            # 定期保存日志（每 save_interval 步）
+            if logs and state.global_step % self.save_interval == 0:
+                log_history = state.log_history
+                if log_history:
+                    log_file = os.path.join(self.output_dir, "training_log.json")
+                    with open(log_file, 'w') as f:
+                        json.dump(log_history, f, indent=2)
+    
+    # 只在设置了 output_dir 时添加日志保存 callback
+    if hasattr(training_args, 'output_dir') and training_args.output_dir:
+        log_interval = training_args.logging_steps if training_args.logging_steps else 100
+        trainer.add_callback(LogSaverCallback(training_args.output_dir, save_interval=log_interval))
+        print(f"✅ 已添加日志保存 callback（每 {log_interval} 步保存一次到 {training_args.output_dir}）")
+    
+    print("🔥 Starting Training...")
+    
+    # 训练前检查 event 文件
+    event_files_before = list(Path(training_args.logging_dir).glob("events.out.tfevents.*"))
+    print(f"📊 训练前 event 文件数: {len(event_files_before)}")
+    
     trainer.train()
     
-    # 保存模型（如果设置了输出目录）
+    # 训练后检查 event 文件
+    event_files_after = list(Path(training_args.logging_dir).glob("events.out.tfevents.*"))
+    print(f"📊 训练后 event 文件数: {len(event_files_after)}")
+    
+    if len(event_files_after) > len(event_files_before):
+        latest_file = max(event_files_after, key=os.path.getmtime)
+        size = os.path.getsize(latest_file)
+        print(f"✅ 最新 event 文件: {latest_file.name}, 大小: {size} bytes")
+    else:
+        print(f"⚠️  警告: event 文件数量未增加，TensorBoard 可能未写入数据")
+    
+    # 保存模型和训练日志（如果设置了输出目录）
     if hasattr(training_args, 'output_dir') and training_args.output_dir:
-        print("✅ Training Finished! Saving Adapter...")
+        print("✅ Training Finished! Saving Adapter and training logs...")
         os.makedirs(training_args.output_dir, exist_ok=True)
+        
+        # 保存模型
         model.save_pretrained(training_args.output_dir)
         print(f"✅ Model saved to {training_args.output_dir}")
+        
+        # 保存训练日志
+        log_history = trainer.state.log_history
+        if log_history:
+            log_file = os.path.join(training_args.output_dir, "training_log.json")
+            with open(log_file, 'w') as f:
+                json.dump(log_history, f, indent=2)
+            print(f"✅ Training logs saved to {log_file}")
+            print(f"   - Total log entries: {len(log_history)}")
+            
+            # 提取并保存 loss 曲线（简化版，方便查看）
+            loss_data = []
+            for entry in log_history:
+                if 'loss' in entry:
+                    loss_data.append({
+                        'step': entry.get('step', entry.get('epoch', 0) * 1000),
+                        'loss': entry['loss'],
+                        'learning_rate': entry.get('learning_rate', 0),
+                        'epoch': entry.get('epoch', 0)
+                    })
+            
+            if loss_data:
+                loss_file = os.path.join(training_args.output_dir, "loss_curve.json")
+                with open(loss_file, 'w') as f:
+                    json.dump(loss_data, f, indent=2)
+                print(f"✅ Loss curve saved to {loss_file}")
+                print(f"   - Loss points: {len(loss_data)}")
+                if len(loss_data) > 0:
+                    print(f"   - Final loss: {loss_data[-1]['loss']:.4f}")
+        else:
+            print(f"⚠️  No training logs found in trainer.state.log_history")
+        
+        # 保存训练配置摘要
+        config_summary = {
+            "output_dir": training_args.output_dir,
+            "total_steps": training_args.max_steps,
+            "batch_size": training_args.per_device_train_batch_size,
+            "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
+            "learning_rate": training_args.learning_rate,
+            "logging_steps": training_args.logging_steps,
+            "dataset_size": len(dataset),
+            "final_step": trainer.state.global_step,
+            "final_epoch": trainer.state.epoch if hasattr(trainer.state, 'epoch') else None,
+        }
+        config_file = os.path.join(training_args.output_dir, "training_config.json")
+        with open(config_file, 'w') as f:
+            json.dump(config_summary, f, indent=2)
+        print(f"✅ Training config saved to {config_file}")
     else:
         print("✅ Training Finished! (No output directory specified, skipping save)")
 

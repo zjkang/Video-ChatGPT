@@ -9,31 +9,35 @@ DEFAULT_VID_START_TOKEN = "<vid_start>"
 DEFAULT_VID_END_TOKEN = "<vid_end>"
 
 
-def get_temporal_features_torch(features):
+def get_temporal_features_torch(features, target_frames=None):
     """
     Computes temporal features from given features (only temporal tokens, consistent with training).
     
     Parameters:
     features (torch.Tensor): Input features to process. Shape: [t, s, c] where t is time frames, s is spatial patches, c is feature dim.
+    target_frames (int, optional): Target number of frames. If None, uses the actual frame count (no padding/truncation).
     
     Returns:
-    torch.Tensor: Temporal features. Shape: [100, c] - only temporal tokens, padded to 100.
+    torch.Tensor: Temporal features. Shape: [target_frames, c] if target_frames is provided, else [t, c].
     """
     t, s, c = features.shape
     
     # Compute temporal tokens as the mean along the spatial axis (same as training)
     temporal_tokens = torch.mean(features, dim=1)  # [t, c] - 对空间维度平均
     
-    # Padding to 100
-    padding_size = 100 - t
-    if padding_size > 0:
-        padding = torch.zeros(padding_size, c, device=features.device)
-        temporal_tokens = torch.cat((temporal_tokens, padding), dim=0)
-    elif t > 100:
-        # If more than 100 frames, truncate
-        temporal_tokens = temporal_tokens[:100]
+    # If target_frames is specified, pad or truncate to match
+    if target_frames is not None:
+        if t < target_frames:
+            # Padding
+            padding_size = target_frames - t
+            padding = torch.zeros(padding_size, c, device=features.device)
+            temporal_tokens = torch.cat((temporal_tokens, padding), dim=0)
+        elif t > target_frames:
+            # Uniform sampling to target_frames
+            indices = torch.linspace(0, t - 1, target_frames, dtype=torch.int64, device=features.device)
+            temporal_tokens = temporal_tokens[indices]
     
-    return temporal_tokens.half()  # [100, c]
+    return temporal_tokens.half()
 
 
 def get_spatio_temporal_features_torch(features):
