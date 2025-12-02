@@ -13,16 +13,14 @@ python train_mem.py \
     --learning_rate 5e-5 \
     --num_train_epochs 3 \
     --warmup_ratio 0.03 \
-    --lr_scheduler_type "cosine" \
-    --weight_decay 0. \
+    --lr_scheduler_type cosine \
+    --weight_decay 0.0 \
     --model_max_length 2048 \
-    --logging_steps 100 \
+    --logging_steps 50 \
     --logging_dir ./logs/baseline_4090 \
     --report_to tensorboard \
-    --save_strategy "steps" \
+    --save_strategy steps \
     --save_steps 3000 \
     --save_total_limit 3 \
     --gradient_checkpointing True \
     --bf16 True
-
-
