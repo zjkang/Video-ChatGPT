@@ -3,6 +3,8 @@ import argparse
 import os
 import sys
 import re
+import logging
+from datetime import datetime
 
 # --- 引用路径修正 ---
 from video_chatgpt.eval.model_utils import initialize_model, load_video
@@ -10,27 +12,73 @@ from video_chatgpt.eval.model_utils import initialize_model, load_video
 from video_chatgpt.model.utils import KeywordsStoppingCriteria
 from video_chatgpt.inference import get_temporal_features_torch
 
+# 设置日志
+def setup_logging(log_file=None):
+    """设置日志，同时输出到控制台和文件"""
+    if log_file is None:
+        # 默认日志文件名：使用时间戳
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        log_file = f"inference_{timestamp}.log"
+    
+    # 创建logs目录（如果不存在）
+    log_dir = "logs"
+    os.makedirs(log_dir, exist_ok=True)
+    log_path = os.path.join(log_dir, log_file)
+    
+    # 配置日志格式
+    log_format = '%(asctime)s - %(levelname)s - %(message)s'
+    date_format = '%Y-%m-%d %H:%M:%S'
+    
+    # 配置logging：同时输出到控制台和文件
+    logging.basicConfig(
+        level=logging.INFO,
+        format=log_format,
+        datefmt=date_format,
+        handlers=[
+            logging.FileHandler(log_path, encoding='utf-8'),  # 文件输出
+            logging.StreamHandler(sys.stdout)  # 控制台输出
+        ]
+    )
+    
+    logger = logging.getLogger(__name__)
+    logger.info(f"📝 Logging to file: {log_path}")
+    return logger, log_path
+
 def main(args):
+    # 0. 设置日志
+    logger, log_path = setup_logging(args.log_file)
+    logger.info("="*60)
+    logger.info("🚀 Starting Video-ChatGPT Inference")
+    logger.info("="*60)
+    logger.info(f"Model: {args.model_name}")
+    logger.info(f"Projection: {args.projection_path}")
+    logger.info(f"Video: {args.video_path}")
+    logger.info(f"Question: {args.question}")
+    logger.info(f"Num frames: {args.num_frames}")
+    logger.info("="*60)
+    
     # 1. 加载模型
+    logger.info("📦 Loading model...")
     model, vision_tower, tokenizer, image_processor, video_token_len = initialize_model(args.model_name, args.projection_path)
+    logger.info("✅ Model loaded successfully")
 
     # 2. 加载视频
     if not os.path.exists(args.video_path):
-        print(f"❌ Error: Video file not found: {args.video_path}")
+        logger.error(f"❌ Error: Video file not found: {args.video_path}")
         return
 
-    print(f"🎬 Processing video: {args.video_path}")
+    logger.info(f"🎬 Processing video: {args.video_path}")
     
     # 确定要加载的帧数（与训练时一致）
     # 如果指定了 num_frames，直接从视频采样该数量的帧
     # 如果不指定，使用默认值16（与训练时的默认值一致）
     num_frames_to_load = args.num_frames if args.num_frames is not None else 16
-    print(f"📹 Loading {num_frames_to_load} frames from video (consistent with training)")
+    logger.info(f"📹 Loading {num_frames_to_load} frames from video (consistent with training)")
     
     video_frames = load_video(args.video_path, num_frames=num_frames_to_load)
     
     if video_frames is None:
-        print("❌ Error: Failed to load video frames.")
+        logger.error("❌ Error: Failed to load video frames.")
         return
 
     # 3. 图像预处理和特征提取（与训练时完全一致的流程）
@@ -63,10 +111,10 @@ def main(args):
         
         # 使用实际的特征长度（与训练时的逻辑一致）
         actual_video_token_len = video_spatio_temporal_features.shape[0]
-        print(f"📊 Generated {actual_video_token_len} temporal tokens (shape: {video_spatio_temporal_features.shape}, consistent with training)")
+        logger.info(f"📊 Generated {actual_video_token_len} temporal tokens (shape: {video_spatio_temporal_features.shape}, consistent with training)")
         
     except Exception as e:
-        print(f"❌ Error during video preprocessing: {e}")
+        logger.error(f"❌ Error during video preprocessing: {e}", exc_info=True)
         return
 
     # 4. 构建对话 Prompt（与训练时完全一致的格式）
@@ -90,7 +138,7 @@ def main(args):
         prompt = f"Human: <video> {video_tokens} {args.question}\nAssistant:"
 
     # 5. Tokenize & 推理
-    print(f"🤖 Asking: {args.question}")
+    logger.info(f"🤖 Asking: {args.question}")
     
     inputs = tokenizer([prompt])
     input_ids = torch.as_tensor(inputs.input_ids).cuda()
@@ -98,7 +146,7 @@ def main(args):
     # 调试信息：检查 prompt 中的 vid_patch token 数量
     vid_patch_token_id = tokenizer.convert_tokens_to_ids("<vid_patch>")
     num_vid_patch_tokens = (input_ids == vid_patch_token_id).sum().item()
-    print(f"🔍 Debug: Found {num_vid_patch_tokens} <vid_patch> tokens in prompt (expected {actual_video_token_len})")
+    logger.info(f"🔍 Debug: Found {num_vid_patch_tokens} <vid_patch> tokens in prompt (expected {actual_video_token_len})")
     
     # 使用与训练时一致的停止标记 "</s>"
     stop_str = "</s>"
@@ -114,28 +162,30 @@ def main(args):
             eos_token_id = eos_tokens['input_ids'][0]
         else:
             eos_token_id = None
-            print("⚠️  Warning: Could not determine eos_token_id, relying on stopping_criteria only")
+            logger.warning("⚠️  Warning: Could not determine eos_token_id, relying on stopping_criteria only")
     
     # 调试信息：检查停止条件
-    print(f"🔍 Debug: eos_token_id={eos_token_id}, stop_str='{stop_str}'")
+    logger.info(f"🔍 Debug: eos_token_id={eos_token_id}, stop_str='{stop_str}'")
     if hasattr(stopping_criteria, 'keyword_ids') and len(stopping_criteria.keyword_ids) > 0:
-        print(f"🔍 Debug: stopping_criteria.keyword_ids={stopping_criteria.keyword_ids}")
+        logger.info(f"🔍 Debug: stopping_criteria.keyword_ids={stopping_criteria.keyword_ids}")
     else:
-        print("⚠️  Warning: stopping_criteria.keyword_ids is empty, token ID detection may fail")
+        logger.warning("⚠️  Warning: stopping_criteria.keyword_ids is empty, token ID detection may fail")
 
     # 6. 运行模型推理
     # 注意：PEFT 包装后的模型要求所有参数都是关键字参数
-    print("🚀 Generating response...")
+    logger.info("🚀 Generating response...")
     with torch.inference_mode():
         output_ids = model.generate(
             input_ids=input_ids,  # 改为关键字参数
             video_spatio_temporal_features=video_spatio_temporal_features.unsqueeze(0),
             do_sample=True,
-            temperature=0.2,
-            max_new_tokens=512,  # 减少最大token数，避免生成过长
+            temperature=0.7,  # 提高temperature，增加多样性，减少重复
+            top_p=0.9,  # 添加nucleus sampling，进一步减少重复
+            max_new_tokens=256,  # 进一步减少最大token数
             use_cache=True,
             eos_token_id=eos_token_id,  # ✅ 直接使用EOS token ID（最可靠的停止方式）
-            repetition_penalty=1.1,  # ✅ 防止重复生成
+            repetition_penalty=1.5,  # ✅ 增加repetition_penalty，更强烈地防止重复
+            no_repeat_ngram_size=3,  # ✅ 防止3-gram重复
             stopping_criteria=[stopping_criteria],  # 作为备用停止条件
             pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id is not None else (eos_token_id if eos_token_id is not None else 0)
         )
@@ -143,7 +193,7 @@ def main(args):
     # 7. 解码输出（不截断，用于分析问题）
     input_token_len = input_ids.shape[1]
     output_token_len = output_ids.shape[1] - input_token_len
-    print(f"🔍 Debug: Generated {output_token_len} new tokens")
+    logger.info(f"🔍 Debug: Generated {output_token_len} new tokens")
     
     # 检查是否生成了 EOS token（用于分析问题）
     eos_token_id_check = tokenizer.eos_token_id
@@ -152,12 +202,12 @@ def main(args):
         eos_positions = (output_ids[0] == eos_token_id_check).nonzero(as_tuple=True)[0]
         if len(eos_positions) > 0:
             first_eos_pos = eos_positions[0].item()
-            print(f"✅ Found </s> token at position {first_eos_pos} (relative to input start: {first_eos_pos - input_token_len})")
-            print(f"   → Model generated </s>, but stopping may have failed")
+            logger.info(f"✅ Found </s> token at position {first_eos_pos} (relative to input start: {first_eos_pos - input_token_len})")
+            logger.info(f"   → Model generated </s>, but stopping may have failed")
         else:
-            print("❌ No </s> token found in generated sequence")
-            print("   → This suggests the model may not have learned to use </s> properly")
-            print("   → This could be a training issue")
+            logger.warning("❌ No </s> token found in generated sequence")
+            logger.warning("   → This suggests the model may not have learned to use </s> properly")
+            logger.warning("   → This could be a training issue")
     
     # 解码完整输出（不跳过特殊token，用于分析）
     outputs_full = tokenizer.batch_decode(output_ids[:, input_token_len:], skip_special_tokens=False)[0]
@@ -168,24 +218,68 @@ def main(args):
         outputs = outputs[:-len(stop_str)]
     outputs = outputs.strip()
     
-    # 显示完整信息用于分析（不截断）
-    print("\n" + "="*60)
-    print("📊 Analysis Information:")
-    print("="*60)
-    print(f"Generated tokens: {output_token_len}")
-    if eos_positions is not None and len(eos_positions) > 0:
-        print(f"EOS token position: {eos_positions[0].item() - input_token_len}")
-    else:
-        print("EOS token: Not found")
-    print(f"Output length: {len(outputs)} characters")
-    print(f"Full output (with special tokens, first 500 chars):\n{outputs_full[:500]}")
-    if len(outputs_full) > 500:
-        print(f"... (truncated for display, total {len(outputs_full)} chars)")
-    print("="*60)
+    # 检测并移除重复文本（后处理）
+    import re
+    # 检测重复的句子模式（相同的句子重复多次）
+    lines = outputs.split('\n')
+    if len(lines) > 1:
+        # 检查是否有重复的句子
+        seen = set()
+        unique_lines = []
+        for line in lines:
+            line_stripped = line.strip()
+            if line_stripped and line_stripped not in seen:
+                seen.add(line_stripped)
+                unique_lines.append(line)
+            elif line_stripped in seen:
+                # 发现重复，截断到这里
+                logger.warning("⚠️  Warning: Detected repetitive sentences, truncating output")
+                break
+        if len(unique_lines) < len(lines):
+            outputs = '\n'.join(unique_lines).strip()
     
+    # 如果输出仍然包含大量重复，尝试更激进的截断
+    # 检测重复的短语（至少10个字符，重复3次以上）
+    if len(outputs) > 100:
+        for pattern_len in range(20, 5, -1):  # 从长到短检测
+            pattern = outputs[:pattern_len]
+            if outputs.count(pattern) >= 3:
+                # 找到第一个重复模式的位置
+                first_repeat = outputs.find(pattern, pattern_len)
+                if first_repeat > 0:
+                    outputs = outputs[:first_repeat].strip()
+                    logger.warning(f"⚠️  Warning: Detected repetitive pattern (length {pattern_len}), truncated at position {first_repeat}")
+                    break
+    
+    # 显示完整信息用于分析（不截断）
+    logger.info("\n" + "="*60)
+    logger.info("📊 Analysis Information:")
+    logger.info("="*60)
+    logger.info(f"Generated tokens: {output_token_len}")
+    if eos_positions is not None and len(eos_positions) > 0:
+        logger.info(f"EOS token position: {eos_positions[0].item() - input_token_len}")
+        logger.warning("⚠️  Warning: Model generated </s> but continued generating (stopping failed)")
+    else:
+        logger.info("EOS token: Not found")
+        logger.warning("⚠️  Warning: Model did not generate </s> token (training issue?)")
+    logger.info(f"Output length: {len(outputs)} characters (after deduplication)")
+    logger.info(f"Full output (with special tokens, first 500 chars):\n{outputs_full[:500]}")
+    if len(outputs_full) > 500:
+        logger.info(f"... (truncated for display, total {len(outputs_full)} chars)")
+    logger.info("="*60)
+    
+    # 保存最终答案到日志
+    logger.info("\n" + "="*30)
+    logger.info(f"📝 Answer:\n{outputs}")
+    logger.info("="*30)
+    logger.info(f"✅ Inference completed. Log saved to: {log_path}")
+    logger.info("="*60 + "\n")
+    
+    # 同时打印到控制台（保持原有行为）
     print("\n" + "="*30)
     print(f"📝 Answer:\n{outputs}")
     print("="*30 + "\n")
+    print(f"💾 Log saved to: {log_path}\n")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -195,5 +289,7 @@ if __name__ == "__main__":
     parser.add_argument("--question", type=str, default="Describe the video in detail.")
     parser.add_argument("--num_frames", type=int, default=None, 
                         help="Number of frames to use (must match training). If None, will use actual frame count from video.")
+    parser.add_argument("--log_file", type=str, default=None,
+                        help="Log file name (optional). If not specified, will use timestamp-based name.")
     args = parser.parse_args()
     main(args)
