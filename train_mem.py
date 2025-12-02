@@ -43,6 +43,12 @@ class TrainingArguments(transformers.TrainingArguments):
     remove_unused_columns: bool = field(default=False) # 防止 Trainer 移除 'video' 等中间键
     logging_dir: Optional[str] = field(default="./logs", metadata={"help": "TensorBoard log directory"})
     report_to: Optional[List[str]] = field(default_factory=lambda: ["tensorboard"], metadata={"help": "Report to tensorboard"})
+    model_max_length: int = field(
+        default=2048,
+        metadata={
+            "help": "Maximum sequence length. Sequences will be right padded (and possibly truncated)."
+        },
+    )
 
 # --- 2. 数据集加载器 (MiniVideoDataset) ---
 class MiniVideoDataset(Dataset):
@@ -214,7 +220,13 @@ def train():
     print(f"   - logging_dir: {training_args.logging_dir}")
 
     # --- A. 加载 Tokenizer ---
-    tokenizer = transformers.AutoTokenizer.from_pretrained(model_args.model_name_or_path, use_fast=False)
+    tokenizer = transformers.AutoTokenizer.from_pretrained(
+        model_args.model_name_or_path,
+        cache_dir=training_args.cache_dir,
+        model_max_length=training_args.model_max_length,
+        padding_side="right",
+        use_fast=False
+    )
     tokenizer.pad_token = tokenizer.unk_token
     # 检查并添加特殊 tokens（避免重复添加）
     special_tokens = ["<video>", "<vid_patch>"]
