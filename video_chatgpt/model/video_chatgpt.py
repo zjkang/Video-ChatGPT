@@ -78,7 +78,17 @@ class VideoChatGPTLlamaModel(LlamaModel):
         if inputs_embeds is None:
             inputs_embeds = self.embed_tokens(input_ids)
 
-        if (input_ids.shape[1] != 1 or self.training) and video_spatio_temporal_features is not None:
+        # 【关键修复】处理视频特征的条件：
+        # 1. 训练时：总是处理视频特征
+        # 2. 推理时：只在第一次 forward（past_key_values is None）时处理视频特征
+        #    因为后续步骤使用 past_key_values，不需要再次处理视频特征
+        # 3. 如果 input_ids.shape[1] == 1 且 past_key_values is None，说明是单token输入，也应该处理视频特征
+        should_process_video = (
+            video_spatio_temporal_features is not None and 
+            (self.training or past_key_values is None)
+        )
+        
+        if should_process_video:
             # 确保 video_spatio_temporal_features 在正确的设备和 dtype 上
             model_device = inputs_embeds.device
             # 获取 mm_projector 权重的 dtype（应该是 float16）

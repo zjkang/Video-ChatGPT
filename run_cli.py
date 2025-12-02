@@ -148,6 +148,21 @@ def main(args):
     num_vid_patch_tokens = (input_ids == vid_patch_token_id).sum().item()
     logger.info(f"🔍 Debug: Found {num_vid_patch_tokens} <vid_patch> tokens in prompt (expected {actual_video_token_len})")
     
+    # 【关键修复】验证 token 数量与特征数量必须一致
+    if num_vid_patch_tokens != actual_video_token_len:
+        logger.error(f"❌ CRITICAL ERROR: Token count mismatch!")
+        logger.error(f"   - <vid_patch> tokens in prompt: {num_vid_patch_tokens}")
+        logger.error(f"   - Video features count: {actual_video_token_len}")
+        logger.error(f"   - This will cause the model to ignore video features!")
+        logger.error(f"   - Model will fallback to text-only generation!")
+        raise ValueError(
+            f"Token count mismatch: {num_vid_patch_tokens} <vid_patch> tokens in prompt "
+            f"but {actual_video_token_len} video features. "
+            f"They must be equal for video features to be processed correctly."
+        )
+    else:
+        logger.info(f"✅ Token count matches: {num_vid_patch_tokens} tokens == {actual_video_token_len} features")
+    
     # 获取 EOS token ID（更可靠的停止方式）
     eos_token_id = tokenizer.eos_token_id
     if eos_token_id is None:
@@ -194,9 +209,17 @@ def main(args):
     logger.info("🚀 Generating response...")
     
     # 准备生成参数
+    # 【关键修复】确保 video_spatio_temporal_features 的形状正确
+    # 形状应该是 [batch_size, num_frames, feature_dim]，即 [1, actual_video_token_len, 1024]
+    video_features_for_model = video_spatio_temporal_features.unsqueeze(0)  # [1, 16, 1024]
+    logger.info(f"✅ Video features shape for model: {video_features_for_model.shape}")
+    logger.info(f"   - Batch size: {video_features_for_model.shape[0]}")
+    logger.info(f"   - Num frames/tokens: {video_features_for_model.shape[1]} (must match {num_vid_patch_tokens} <vid_patch> tokens)")
+    logger.info(f"   - Feature dim: {video_features_for_model.shape[2]}")
+    
     generation_kwargs = {
         "input_ids": input_ids,
-        "video_spatio_temporal_features": video_spatio_temporal_features.unsqueeze(0),
+        "video_spatio_temporal_features": video_features_for_model,
         "do_sample": True,
         "temperature": 0.7,
         "top_p": 0.9,
