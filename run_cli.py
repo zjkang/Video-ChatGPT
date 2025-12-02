@@ -148,21 +148,39 @@ def main(args):
     num_vid_patch_tokens = (input_ids == vid_patch_token_id).sum().item()
     logger.info(f"🔍 Debug: Found {num_vid_patch_tokens} <vid_patch> tokens in prompt (expected {actual_video_token_len})")
     
-    # 使用与训练时一致的停止标记 "</s>"
-    stop_str = "</s>"
-    keywords = [stop_str]
-    stopping_criteria = KeywordsStoppingCriteria(keywords, tokenizer, input_ids)
-    
     # 获取 EOS token ID（更可靠的停止方式）
     eos_token_id = tokenizer.eos_token_id
     if eos_token_id is None:
         # 如果 eos_token_id 不存在，尝试从 "</s>" 获取
-        eos_tokens = tokenizer(stop_str, add_special_tokens=False)
-        if len(eos_tokens['input_ids']) == 1:
-            eos_token_id = eos_tokens['input_ids'][0]
+        stop_str = "</s>"
+        eos_tokens = tokenizer(stop_str, add_special_tokens=False, return_tensors=None)
+        if isinstance(eos_tokens, dict):
+            eos_token_list = eos_tokens.get('input_ids', [])
+        else:
+            eos_token_list = eos_tokens
+        if len(eos_token_list) == 1:
+            eos_token_id = eos_token_list[0] if isinstance(eos_token_list[0], int) else eos_token_list[0][0]
+            logger.info(f"✅ Found eos_token_id from '</s>': {eos_token_id}")
         else:
             eos_token_id = None
-            logger.warning("⚠️  Warning: Could not determine eos_token_id, relying on stopping_criteria only")
+            logger.warning("⚠️  Warning: Could not determine eos_token_id")
+    else:
+        logger.info(f"✅ Using tokenizer.eos_token_id: {eos_token_id}")
+    
+    # 使用与训练时一致的停止标记 "</s>"
+    stop_str = "</s>"
+    keywords = [stop_str]
+    
+    # 修复 KeywordsStoppingCriteria 的初始化：手动设置 keyword_ids
+    # 因为原始的 KeywordsStoppingCriteria 可能无法正确解析 "</s>"
+    stopping_criteria = KeywordsStoppingCriteria(keywords, tokenizer, input_ids)
+    
+    # 如果 keyword_ids 为空，手动设置（修复 bug）
+    if (not hasattr(stopping_criteria, 'keyword_ids') or 
+        len(stopping_criteria.keyword_ids) == 0) and eos_token_id is not None:
+        # 手动添加 eos_token_id 到 keyword_ids
+        stopping_criteria.keyword_ids = [eos_token_id]
+        logger.info(f"✅ Fixed stopping_criteria.keyword_ids: {stopping_criteria.keyword_ids}")
     
     # 调试信息：检查停止条件
     logger.info(f"🔍 Debug: eos_token_id={eos_token_id}, stop_str='{stop_str}'")
@@ -174,21 +192,38 @@ def main(args):
     # 6. 运行模型推理
     # 注意：PEFT 包装后的模型要求所有参数都是关键字参数
     logger.info("🚀 Generating response...")
+    
+    # 准备生成参数
+    generation_kwargs = {
+        "input_ids": input_ids,
+        "video_spatio_temporal_features": video_spatio_temporal_features.unsqueeze(0),
+        "do_sample": True,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "max_new_tokens": 256,
+        "use_cache": True,
+        "repetition_penalty": 1.5,
+        "no_repeat_ngram_size": 3,
+        "stopping_criteria": [stopping_criteria],
+    }
+    
+    # 确保 eos_token_id 正确设置（这是最关键的停止条件）
+    if eos_token_id is not None:
+        generation_kwargs["eos_token_id"] = eos_token_id
+        logger.info(f"✅ Using eos_token_id={eos_token_id} for generation")
+    else:
+        logger.warning("⚠️  Warning: eos_token_id is None, generation may not stop properly")
+    
+    # 设置 pad_token_id
+    if tokenizer.pad_token_id is not None:
+        generation_kwargs["pad_token_id"] = tokenizer.pad_token_id
+    elif eos_token_id is not None:
+        generation_kwargs["pad_token_id"] = eos_token_id
+    else:
+        generation_kwargs["pad_token_id"] = 0
+    
     with torch.inference_mode():
-        output_ids = model.generate(
-            input_ids=input_ids,  # 改为关键字参数
-            video_spatio_temporal_features=video_spatio_temporal_features.unsqueeze(0),
-            do_sample=True,
-            temperature=0.7,  # 提高temperature，增加多样性，减少重复
-            top_p=0.9,  # 添加nucleus sampling，进一步减少重复
-            max_new_tokens=256,  # 进一步减少最大token数
-            use_cache=True,
-            eos_token_id=eos_token_id,  # ✅ 直接使用EOS token ID（最可靠的停止方式）
-            repetition_penalty=1.5,  # ✅ 增加repetition_penalty，更强烈地防止重复
-            no_repeat_ngram_size=3,  # ✅ 防止3-gram重复
-            stopping_criteria=[stopping_criteria],  # 作为备用停止条件
-            pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id is not None else (eos_token_id if eos_token_id is not None else 0)
-        )
+        output_ids = model.generate(**generation_kwargs)
 
     # 7. 解码输出（不截断，用于分析问题）
     input_token_len = input_ids.shape[1]
