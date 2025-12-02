@@ -416,9 +416,24 @@ def train():
             if logs and state.global_step % self.save_interval == 0:
                 log_history = state.log_history
                 if log_history:
+                    try:
+                        log_file = os.path.join(self.output_dir, "training_log.json")
+                        with open(log_file, 'w', encoding='utf-8') as f:
+                            json.dump(log_history, f, indent=2, ensure_ascii=False)
+                    except Exception as e:
+                        print(f"⚠️  警告: 保存训练日志时出错: {e}")
+        
+        def on_train_end(self, args, state, control, **kwargs):
+            # 训练结束时也保存一次（确保最后的数据被保存）
+            log_history = state.log_history
+            if log_history:
+                try:
                     log_file = os.path.join(self.output_dir, "training_log.json")
-                    with open(log_file, 'w') as f:
-                        json.dump(log_history, f, indent=2)
+                    with open(log_file, 'w', encoding='utf-8') as f:
+                        json.dump(log_history, f, indent=2, ensure_ascii=False)
+                    print(f"✅ LogSaverCallback: 训练结束时保存日志到 {log_file}")
+                except Exception as e:
+                    print(f"⚠️  警告: 训练结束时保存日志出错: {e}")
     
     # 只在设置了 output_dir 时添加日志保存 callback
     if hasattr(training_args, 'output_dir') and training_args.output_dir:
@@ -457,11 +472,14 @@ def train():
         # 保存训练日志
         log_history = trainer.state.log_history
         if log_history:
-            log_file = os.path.join(training_args.output_dir, "training_log.json")
-            with open(log_file, 'w') as f:
-                json.dump(log_history, f, indent=2)
-            print(f"✅ Training logs saved to {log_file}")
-            print(f"   - Total log entries: {len(log_history)}")
+            try:
+                log_file = os.path.join(training_args.output_dir, "training_log.json")
+                with open(log_file, 'w', encoding='utf-8') as f:
+                    json.dump(log_history, f, indent=2, ensure_ascii=False)
+                print(f"✅ Training logs saved to {log_file}")
+                print(f"   - Total log entries: {len(log_history)}")
+            except Exception as e:
+                print(f"❌ 错误: 保存训练日志失败: {e}")
             
             # 提取并保存 loss 曲线（简化版，方便查看）
             loss_data = []
@@ -475,32 +493,45 @@ def train():
                     })
             
             if loss_data:
-                loss_file = os.path.join(training_args.output_dir, "loss_curve.json")
-                with open(loss_file, 'w') as f:
-                    json.dump(loss_data, f, indent=2)
-                print(f"✅ Loss curve saved to {loss_file}")
-                print(f"   - Loss points: {len(loss_data)}")
-                if len(loss_data) > 0:
-                    print(f"   - Final loss: {loss_data[-1]['loss']:.4f}")
+                try:
+                    loss_file = os.path.join(training_args.output_dir, "loss_curve.json")
+                    with open(loss_file, 'w', encoding='utf-8') as f:
+                        json.dump(loss_data, f, indent=2, ensure_ascii=False)
+                    print(f"✅ Loss curve saved to {loss_file}")
+                    print(f"   - Loss points: {len(loss_data)}")
+                    if len(loss_data) > 0:
+                        print(f"   - Final loss: {loss_data[-1]['loss']:.4f}")
+                except Exception as e:
+                    print(f"❌ 错误: 保存 loss 曲线失败: {e}")
         else:
-            print(f"⚠️  No training logs found in trainer.state.log_history")
+            print(f"⚠️  警告: trainer.state.log_history 为空，无法保存训练日志")
         
         # 保存训练配置摘要
         config_summary = {
             "output_dir": training_args.output_dir,
-            "total_steps": training_args.max_steps,
+            "max_steps": training_args.max_steps if training_args.max_steps > 0 else None,
+            "num_train_epochs": training_args.num_train_epochs if hasattr(training_args, 'num_train_epochs') else None,
+            "total_steps": trainer.state.max_steps if hasattr(trainer.state, 'max_steps') else (training_args.max_steps if training_args.max_steps > 0 else None),
             "batch_size": training_args.per_device_train_batch_size,
             "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
+            "effective_batch_size": training_args.per_device_train_batch_size * training_args.gradient_accumulation_steps,
             "learning_rate": training_args.learning_rate,
+            "warmup_ratio": training_args.warmup_ratio if hasattr(training_args, 'warmup_ratio') else None,
+            "lr_scheduler_type": training_args.lr_scheduler_type if hasattr(training_args, 'lr_scheduler_type') else None,
+            "weight_decay": training_args.weight_decay if hasattr(training_args, 'weight_decay') else None,
+            "model_max_length": training_args.model_max_length if hasattr(training_args, 'model_max_length') else None,
             "logging_steps": training_args.logging_steps,
             "dataset_size": len(dataset),
             "final_step": trainer.state.global_step,
             "final_epoch": trainer.state.epoch if hasattr(trainer.state, 'epoch') else None,
         }
-        config_file = os.path.join(training_args.output_dir, "training_config.json")
-        with open(config_file, 'w') as f:
-            json.dump(config_summary, f, indent=2)
-        print(f"✅ Training config saved to {config_file}")
+        try:
+            config_file = os.path.join(training_args.output_dir, "training_config.json")
+            with open(config_file, 'w', encoding='utf-8') as f:
+                json.dump(config_summary, f, indent=2, ensure_ascii=False)
+            print(f"✅ Training config saved to {config_file}")
+        except Exception as e:
+            print(f"❌ 错误: 保存训练配置失败: {e}")
     else:
         print("✅ Training Finished! (No output directory specified, skipping save)")
 
