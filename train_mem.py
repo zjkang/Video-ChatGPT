@@ -32,7 +32,7 @@ class DataArguments:
 class TrainingArguments(transformers.TrainingArguments):
     cache_dir: Optional[str] = field(default=None)
     optim: str = field(default="paged_adamw_32bit")
-    max_steps: int = field(default=10, metadata={"help": "For dry run, only run 10 steps"})
+    max_steps: int = field(default=-1, metadata={"help": "Maximum number of training steps. -1 means use num_train_epochs instead."})
     logging_steps: int = field(default=1) # 增加日志输出频率，方便我们观察 Loss
     gradient_checkpointing: bool = field(default=True)
     per_device_train_batch_size: int = field(default=2)
@@ -194,6 +194,21 @@ class DataCollatorForVideo:
 def train():
     parser = transformers.HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+    
+    # 检查 max_steps 和 num_train_epochs 的关系
+    # HuggingFace Trainer 优先使用 max_steps，如果 max_steps > 0
+    # 如果用户设置了 num_train_epochs 但没有设置 max_steps（或 max_steps=-1），则使用 epochs
+    if training_args.max_steps > 0 and hasattr(training_args, 'num_train_epochs') and training_args.num_train_epochs > 0:
+        print(f"⚠️  警告: 同时设置了 max_steps={training_args.max_steps} 和 num_train_epochs={training_args.num_train_epochs}")
+        print(f"   Trainer 会优先使用 max_steps，num_train_epochs 将被忽略")
+        print(f"   如果希望使用 epochs，请设置 --max_steps -1")
+    elif training_args.max_steps == -1:
+        if hasattr(training_args, 'num_train_epochs') and training_args.num_train_epochs > 0:
+            print(f"✅ 使用 num_train_epochs={training_args.num_train_epochs} 进行训练")
+        else:
+            print(f"⚠️  警告: max_steps=-1 且未设置 num_train_epochs，将使用默认值")
+    elif training_args.max_steps > 0:
+        print(f"✅ 使用 max_steps={training_args.max_steps} 进行训练")
     
     # 立即检查和修复 report_to 参数（在创建 Trainer 之前）
     print(f"🔍 解析后的参数:")

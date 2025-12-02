@@ -2,6 +2,7 @@
 
 # RTX 4090 (24GB) 训练脚本
 # 使用 QLoRA + 优化配置
+# 训练 3 个 epochs（使用 num_train_epochs，max_steps 默认为 -1）
 
 python train_mem.py \
     --data_path data/VideoInstruct-100K/VideoInstruct100K.json \
@@ -12,6 +13,7 @@ python train_mem.py \
     --gradient_accumulation_steps 2 \
     --learning_rate 5e-5 \
     --num_train_epochs 3 \
+    --max_steps -1 \
     --warmup_ratio 0.03 \
     --lr_scheduler_type cosine \
     --weight_decay 0.0 \
