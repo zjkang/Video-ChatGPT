@@ -2,6 +2,7 @@ import torch
 import argparse
 import os
 import sys
+import re
 
 # --- 引用路径修正 ---
 from video_chatgpt.eval.model_utils import initialize_model, load_video
@@ -103,6 +104,24 @@ def main(args):
     stop_str = "</s>"
     keywords = [stop_str]
     stopping_criteria = KeywordsStoppingCriteria(keywords, tokenizer, input_ids)
+    
+    # 获取 EOS token ID（更可靠的停止方式）
+    eos_token_id = tokenizer.eos_token_id
+    if eos_token_id is None:
+        # 如果 eos_token_id 不存在，尝试从 "</s>" 获取
+        eos_tokens = tokenizer(stop_str, add_special_tokens=False)
+        if len(eos_tokens['input_ids']) == 1:
+            eos_token_id = eos_tokens['input_ids'][0]
+        else:
+            eos_token_id = None
+            print("⚠️  Warning: Could not determine eos_token_id, relying on stopping_criteria only")
+    
+    # 调试信息：检查停止条件
+    print(f"🔍 Debug: eos_token_id={eos_token_id}, stop_str='{stop_str}'")
+    if hasattr(stopping_criteria, 'keyword_ids') and len(stopping_criteria.keyword_ids) > 0:
+        print(f"🔍 Debug: stopping_criteria.keyword_ids={stopping_criteria.keyword_ids}")
+    else:
+        print("⚠️  Warning: stopping_criteria.keyword_ids is empty, token ID detection may fail")
 
     # 6. 运行模型推理
     # 注意：PEFT 包装后的模型要求所有参数都是关键字参数
@@ -113,20 +132,56 @@ def main(args):
             video_spatio_temporal_features=video_spatio_temporal_features.unsqueeze(0),
             do_sample=True,
             temperature=0.2,
-            max_new_tokens=1024,
+            max_new_tokens=512,  # 减少最大token数，避免生成过长
             use_cache=True,
-            stopping_criteria=[stopping_criteria]
+            eos_token_id=eos_token_id,  # ✅ 直接使用EOS token ID（最可靠的停止方式）
+            repetition_penalty=1.1,  # ✅ 防止重复生成
+            stopping_criteria=[stopping_criteria],  # 作为备用停止条件
+            pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id is not None else (eos_token_id if eos_token_id is not None else 0)
         )
 
-    # 7. 解码输出
+    # 7. 解码输出（不截断，用于分析问题）
     input_token_len = input_ids.shape[1]
     output_token_len = output_ids.shape[1] - input_token_len
     print(f"🔍 Debug: Generated {output_token_len} new tokens")
     
+    # 检查是否生成了 EOS token（用于分析问题）
+    eos_token_id_check = tokenizer.eos_token_id
+    eos_positions = None
+    if eos_token_id_check is not None:
+        eos_positions = (output_ids[0] == eos_token_id_check).nonzero(as_tuple=True)[0]
+        if len(eos_positions) > 0:
+            first_eos_pos = eos_positions[0].item()
+            print(f"✅ Found </s> token at position {first_eos_pos} (relative to input start: {first_eos_pos - input_token_len})")
+            print(f"   → Model generated </s>, but stopping may have failed")
+        else:
+            print("❌ No </s> token found in generated sequence")
+            print("   → This suggests the model may not have learned to use </s> properly")
+            print("   → This could be a training issue")
+    
+    # 解码完整输出（不跳过特殊token，用于分析）
+    outputs_full = tokenizer.batch_decode(output_ids[:, input_token_len:], skip_special_tokens=False)[0]
     outputs = tokenizer.batch_decode(output_ids[:, input_token_len:], skip_special_tokens=True)[0]
-    outputs = outputs.strip()
+    
+    # 清理停止标记
     if outputs.endswith(stop_str):
         outputs = outputs[:-len(stop_str)]
+    outputs = outputs.strip()
+    
+    # 显示完整信息用于分析（不截断）
+    print("\n" + "="*60)
+    print("📊 Analysis Information:")
+    print("="*60)
+    print(f"Generated tokens: {output_token_len}")
+    if eos_positions is not None and len(eos_positions) > 0:
+        print(f"EOS token position: {eos_positions[0].item() - input_token_len}")
+    else:
+        print("EOS token: Not found")
+    print(f"Output length: {len(outputs)} characters")
+    print(f"Full output (with special tokens, first 500 chars):\n{outputs_full[:500]}")
+    if len(outputs_full) > 500:
+        print(f"... (truncated for display, total {len(outputs_full)} chars)")
+    print("="*60)
     
     print("\n" + "="*30)
     print(f"📝 Answer:\n{outputs}")
